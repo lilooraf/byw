@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Country" ALTER COLUMN "code" DROP NOT NULL,
+ALTER COLUMN "flag" DROP NOT NULL;

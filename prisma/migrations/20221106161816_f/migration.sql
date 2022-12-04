@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Fixture" ALTER COLUMN "timestamp" SET DATA TYPE BIGINT,
+ALTER COLUMN "leagueId" DROP NOT NULL;

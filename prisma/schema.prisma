@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Team {
+  id           Int        @id @unique
+  name         String     @unique
+  logo         String?
+  FixturesHome Fixture[]  @relation(name: "home")
+  FixturesAway Fixture[]  @relation(name: "away")
+  Fixtures     Fixture[]  @relation(name: "FixtureTeams")
+  leagueId     Int?
+  League       League?    @relation(onDelete: Cascade, fields: [leagueId], references: [id])
+  Standing     Standing[]
+}
+
+model Standing {
+  id         Int     @id @default(autoincrement())
+  rank       Int
+  points     Int
+  goalsDiff  Int
+  score      Json?   @db.Json
+  leagueId   Int
+  League     League  @relation(onDelete: Cascade, fields: [leagueId], references: [id])
+  teamId     Int
+  Team       Team    @relation(fields: [teamId], references: [id])
+  seasonYear Int?
+  Season     Season? @relation(fields: [seasonYear], references: [year])
+}
+
+model League {
+  id          Int        @id @unique
+  name        String
+  type        String
+  logo        String
+  Country     Country?   @relation(onDelete: Cascade, fields: [countryCode], references: [code])
+  countryCode String?
+  Fixtures    Fixture[]
+  Teams       Team[]
+  Standings   Standing[]
+  Season      Season[]
+}
+
+model Season {
+  year      Int        @id @unique
+  Standings Standing[]
+  Fixtures  Fixture[]
+  Leagues   League[]
+}
+
+model Country {
+  code    String?  @unique
+  name    String   @unique
+  flag    String?
+  Leagues League[]
+  Venues  Venue[]
+}
+
+model Venue {
+  id          Int       @id @unique
+  name        String
+  address     String?
+  city        String
+  image       String
+  capacity    Int
+  Fixtures    Fixture[]
+  Country     Country?  @relation(onDelete: Cascade, fields: [countryCode], references: [code])
+  countryCode String?
+}
+
+model Byw {
+  id         Int      @id @default(autoincrement())
+  indice     Float
+  rank       Float
+  perf       Float
+  domExtRank Float
+  domExtPerf Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fixtureId  Int      @unique
+  Fixture    Fixture  @relation(onDelete: Cascade, fields: [fixtureId], references: [id])
+}
+
+model Fixture {
+  id         Int      @id @unique
+  timezone   String
+  date       DateTime
+  timestamp  BigInt
+  leagueId   Int?
+  League     League?  @relation(onDelete: Cascade, fields: [leagueId], references: [id])
+  Venue      Venue?   @relation(onDelete: Cascade, fields: [venueId], references: [id])
+  venueId    Int?
+  TeamHome   Team?    @relation(onDelete: Cascade, fields: [teamHomeId], references: [id], name: "home")
+  teamHomeId Int?
+  TeamAway   Team?    @relation(onDelete: Cascade, fields: [teamAwayId], references: [id], name: "away")
+  teamAwayId Int?
+  Teams      Team[]   @relation(name: "FixtureTeams")
+  winnerHome Boolean?
+  winnerAway Boolean?
+  score      Json?    @db.Json
+  seasonYear Int?
+  Season     Season?  @relation(onDelete: Cascade, fields: [seasonYear], references: [year])
+  BywId      Int?
+  Byw        Byw?
+}
+
+model Post {
+  id        Int     @id @default(autoincrement())
+  title     String
+  content   String?
+  published Boolean @default(false)
+  author    User?   @relation(onDelete: Cascade, fields: [authorId], references: [id])
+  authorId  Int?
+}
+
+model Account {
+  id                 Int     @id @default(autoincrement())
+  userId             Int     @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  oauth_token_secret String?
+  oauth_token        String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique @map("session_token")
+  userId       Int      @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  posts         Post[]
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map(name: "users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
