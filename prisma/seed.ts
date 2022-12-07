@@ -62,28 +62,6 @@ async function main() {
   await seedStandigns();
   console.log(`Standings Seeded.`);
   bywAlgo(100);
-  
-
-
-  // await seedStandigns();
-
-  // let leagues = await fetchLeagues();
-  // leagues.forEach(async (league) => {
-  //   await storeLeague(league);
-  // });
-  // await new Promise((resolve) => setTimeout(resolve, 10000));
-  // while (true) {
-  //   updateFixtures();
-  //   await new Promise((resolve) => setTimeout(resolve, 60000));
-  // }
-
-  // getNextFixtures(20);
-  // for (const u of userData) {
-  //   const user = await prisma.user.create({
-  //     data: u,
-  //   });
-  //   console.log(`Created user with id: ${user.id}`);
-  // }
   console.log(`Seeding finished.`);
 }
 
