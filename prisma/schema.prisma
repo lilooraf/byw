@@ -100,8 +100,11 @@ model Fixture {
   TeamAway   Team?    @relation(onDelete: Cascade, fields: [teamAwayId], references: [id], name: "away")
   teamAwayId Int?
   Teams      Team[]   @relation(name: "FixtureTeams")
+  status_     String
   winnerHome Boolean?
   winnerAway Boolean?
+  homeScore  Int
+  awayScore  Int
   score      Json?    @db.Json
   seasonYear Int?
   Season     Season?  @relation(onDelete: Cascade, fields: [seasonYear], references: [year])

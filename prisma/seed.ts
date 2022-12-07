@@ -1,6 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { fetchLeagues } from '../api/fetch';
 import { seedFixtures, seedLeagues, seedStandigns } from '../api/logic';
+import { bywAlgo } from '../api/process';
 import { processFixture } from '../bywAlgo/process';
 // import { storeLeague } from "../api/store";
 
@@ -54,29 +55,14 @@ const userData: Prisma.UserCreateInput[] = [
 
 async function main() {
   // console.log(`Start seeding ...`);
-  // await seedLeagues(10);
+  // await seedLeagues(5);
   // console.log(`Leagues Seeded`);
   // await seedFixtures();
   // console.log(`Fixtures Seeded.`);
   // await seedStandigns();
   // console.log(`Standings Seeded.`);
-
-  console.log('Byw Algo');
-  let fixtures = await prisma.fixture.findMany({
-    where: {
-      date: {
-        lte: new Date(),
-      },
-    },
-    orderBy: {
-      date: 'desc',
-    },
-    take: 40,
-  });
-
-  for (const fixture of fixtures) {
-    await processFixture(fixture);
-  }
+  bywAlgo(100);
+  
 
 
   // await seedStandigns();

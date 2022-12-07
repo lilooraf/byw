@@ -1,11 +1,13 @@
-import { Country, League, Season } from "@prisma/client";
-import prisma from "../lib/prisma";
-import { LeagueData, Venue } from "./types";
+import { Country, League, Season } from '@prisma/client';
+import prisma from '../lib/prisma';
+import { LeagueData, Venue } from './types';
 
-export const getFromDBLeagues = async (): Promise<(League & {
-  Season: Season[];
-  Country: Country;
-})[]> => {
+export const getFromDBLeagues = async (): Promise<
+  (League & {
+    Season: Season[];
+    Country: Country;
+  })[]
+> => {
   const leagues = await prisma.league.findMany({
     include: {
       Country: true,
@@ -15,8 +17,10 @@ export const getFromDBLeagues = async (): Promise<(League & {
   return leagues;
 };
 
-export const getLastFixturesByTeamId = async (teamId: number, number: number) => {
-
+export const getLastFixturesByTeamId = async (
+  teamId: number,
+  number: number
+) => {
   const fixtures = await prisma.fixture.findMany({
     where: {
       OR: [
@@ -27,31 +31,35 @@ export const getLastFixturesByTeamId = async (teamId: number, number: number) =>
           teamAwayId: teamId,
         },
       ],
+      status_: {
+        in: ['FT', 'AET', 'PEN'],
+      },
       date: {
         lte: new Date(),
       },
     },
     orderBy: {
-      date: "desc",
+      date: 'asc',
     },
     take: number,
-   
+
     select: {
       id: true,
       score: true,
       TeamHome: {
         select: {
           id: true,
-          name: true,
         },
       },
     },
   });
+
   return fixtures;
 };
 
-
-export const getFromDBLeagueById = async (leagueId: number): Promise<LeagueData> => {
+export const getFromDBLeagueById = async (
+  leagueId: number
+): Promise<LeagueData> => {
   if (!leagueId) return null;
   return await prisma.league
     .findFirst({
@@ -65,7 +73,11 @@ export const getFromDBLeagueById = async (leagueId: number): Promise<LeagueData>
     })
     .then((leagueDB) => {
       if (!leagueDB) return null;
-      return { country: leagueDB.Country, league: leagueDB, seasons: leagueDB.Season } as LeagueData;
+      return {
+        country: leagueDB.Country,
+        league: leagueDB,
+        seasons: leagueDB.Season,
+      } as LeagueData;
     })
     .catch((error) => {
       console.error(error);

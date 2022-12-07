@@ -15,14 +15,18 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const fixtures = await prisma.fixture.findMany({
     where: {
       date: {
-        lte: new Date(),
+        gte: new Date(),
       },
+      // Byw: {
+      //   isNot: null,
+      // }
     },
     orderBy: {
-      date: 'desc',
+      date: 'asc',
     },
-    take: 40,
+    take: 100,
     include: {
+      Byw: true,
       League: {
         include: {
           Country: true,
@@ -39,16 +43,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           FixturesAway: {
             select: {
@@ -58,16 +66,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           FixturesHome: {
             select: {
@@ -77,16 +89,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           League: {
             select: {
@@ -106,16 +122,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           FixturesAway: {
             select: {
@@ -125,16 +145,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           FixturesHome: {
             select: {
@@ -144,16 +168,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
               winnerHome: true,
               teamAwayId: true,
               teamHomeId: true,
+              status_: true,
             },
             where: {
               date: {
                 lte: new Date()
-              }
+              },
+              status_: {
+                not: undefined
+              },
             },
             orderBy: {
               date: 'desc',
             },
-            take: 10,
+            take: 5,
           },
           League: {
             select: {

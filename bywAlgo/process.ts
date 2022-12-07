@@ -6,7 +6,6 @@ type FixtureCustom = {
   id: number;
   TeamHome: {
     id: number;
-    name: string;
   };
   score: Prisma.JsonValue;
 };
@@ -89,8 +88,8 @@ export const processFixture = async (fixture: Fixture) => {
   let awayFixtures: FixtureCustom[] = [];
 
   try {
-    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 20);
-    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 20);
+    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 100);
+    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 100);
   } catch (e) {
     throw e;
   }
@@ -113,8 +112,8 @@ export const processFixture = async (fixture: Fixture) => {
       part.performanceWeight
     );
   });
-  console.log('Rank:' + rank.toString());
-  console.log('Perf:' + perf.toString());
+  // console.log('Rank:' + rank.toString());
+  // console.log('Perf:' + perf.toString());
 
   let homeDomFixtures = getDomExtFixtures(homeFixtures, teamHomeId, true);
   let awayExtFixtures = getDomExtFixtures(awayFixtures, teamAwayId, false);
@@ -133,16 +132,18 @@ export const processFixture = async (fixture: Fixture) => {
     );
   });
 
-  console.log('DomExt Rank:' + domextrank.toString());
-  console.log('DomExt Perf:' + domextperf.toString());
+  // console.log('DomExt Rank:' + domextrank.toString());
+  // console.log('DomExt Perf:' + domextperf.toString());
 
   let result = (domextrank + domextperf + rank + perf) * (1 / 3 + 1);
 
-  console.log('Result: ' + result.toString());
+  // console.log('Result: ' + result.toString());
 
   // Head To Head
 
   // To do
+
+  if (!result || !rank || !perf || !domextrank || !domextperf) throw 'Error in BywAlgo processFixture result null ' + fixture.id + ' homeFixtures: ' + homeFixtures.length + ' awayFixtures: ' + awayFixtures.length + ' homeDomFixtures: ' + homeDomFixtures.length + ' awayExtFixtures: ' + awayExtFixtures.length;
 
   const byw: BywCustom = {
     indice: result,
@@ -264,8 +265,6 @@ const getPoints = (score: Prisma.JsonValue, home: boolean): number => {
 
   if (!homePoint && !awayPoint) {
     // eslint-disable-next-line no-throw-literal
-      console.log('Error: No score found', score);
-      
     throw 'Error the fixture have null scores at every moment';
   }
   return home ? homePoint : awayPoint;

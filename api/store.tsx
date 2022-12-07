@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { BywCustom } from '../bywAlgo/process';
 import prisma from '../lib/prisma';
 import { getFromDBLeagueById } from './getFromDB';
@@ -434,6 +435,41 @@ export const storeStandings = async (standingsData: Standing[]) => {
 //     });
 // };
 
+
+const hasWin = (score: Prisma.JsonValue, home: boolean): boolean | null => {
+  var homePoint = false;
+  var awayPoint = false;
+  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
+
+  moments.forEach((moment) => {
+    if (!homePoint && !awayPoint && score[moment].home != null) {
+      if (score[moment].home > score[moment].away)
+        homePoint = true;
+      if (score[moment].home < score[moment].away)
+        awayPoint = true;
+      if (score[moment].home === score[moment].away) {
+        homePoint = false;
+        awayPoint = false;
+      }
+    }
+  });
+  return home ? homePoint : awayPoint;
+};
+
+const finalScore = (score: Prisma.JsonValue, home: boolean): number => {
+  var homePoint = 0;
+  var awayPoint = 0;
+  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
+
+  moments.forEach((moment) => {
+    if (!homePoint && !awayPoint && score[moment].home != null) {
+      homePoint = score[moment].home;
+      awayPoint = score[moment].away;
+    }
+  });
+  return home ? homePoint : awayPoint;
+};
+
 export const storeFixture = async (fixture: Fixture) => {
   const res = prisma.fixture.upsert({
     where: {
@@ -442,10 +478,13 @@ export const storeFixture = async (fixture: Fixture) => {
     create: {
       id: fixture.fixture.id,
       date: fixture.fixture.date,
-      winnerAway: fixture.teams.away.winner,
-      winnerHome: fixture.teams.home.winner,
+      winnerHome: hasWin(fixture.score, true),
+      winnerAway: hasWin(fixture.score, false),
+      homeScore: finalScore(fixture.score, true),
+      awayScore: finalScore(fixture.score, false),
       timestamp: fixture.fixture.timestamp,
       timezone: fixture.fixture.timezone,
+      status_: fixture.fixture.status.short,
       score: fixture.score,
       Teams: {
         connectOrCreate: [
