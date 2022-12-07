@@ -54,13 +54,13 @@ const userData: Prisma.UserCreateInput[] = [
 ];
 
 async function main() {
-  // console.log(`Start seeding ...`);
-  // await seedLeagues(5);
-  // console.log(`Leagues Seeded`);
-  // await seedFixtures();
-  // console.log(`Fixtures Seeded.`);
-  // await seedStandigns();
-  // console.log(`Standings Seeded.`);
+  console.log(`Start seeding ...`);
+  await seedLeagues(5);
+  console.log(`Leagues Seeded`);
+  await seedFixtures();
+  console.log(`Fixtures Seeded.`);
+  await seedStandigns();
+  console.log(`Standings Seeded.`);
   bywAlgo(100);
   
 
