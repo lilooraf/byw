@@ -113,6 +113,7 @@ export const storeStandingsd = async (standingsData: Standing[]) => {
 
 export const storeStandings = async (standingsData: Standing[]) => {
   if (!standingsData) return;
+  let error = false;
 
   standingsData.forEach((data) => {
     getFromDBLeagueById(data.league.id).then((league) => {
@@ -207,12 +208,8 @@ export const storeStandings = async (standingsData: Standing[]) => {
                   },
                 },
               })
-              .catch((error) => {
-                console.log(
-                  'Team not found id',
-                  standing.team.name,
-                  standing.team.id
-                );
+              .catch(() => {
+                error = true;
               });
           } else {
             prisma.team
@@ -292,11 +289,13 @@ export const storeStandings = async (standingsData: Standing[]) => {
                   });
               })
               .catch(() => {
-                console.log(
-                  'Team not found name',
-                  standing.team.name,
-                  standing.team.id
-                );
+                if (error) {
+                  console.log(
+                    'Team not found ',
+                    standing.team.name,
+                    standing.team.id
+                  );
+                }
               });
           }
         });
@@ -312,10 +311,8 @@ const hasWin = (score: Prisma.JsonValue, home: boolean): boolean | null => {
 
   moments.forEach((moment) => {
     if (!homePoint && !awayPoint && score[moment].home != null) {
-      if (score[moment].home > score[moment].away)
-        homePoint = true;
-      if (score[moment].home < score[moment].away)
-        awayPoint = true;
+      if (score[moment].home > score[moment].away) homePoint = true;
+      if (score[moment].home < score[moment].away) awayPoint = true;
       if (score[moment].home === score[moment].away) {
         homePoint = false;
         awayPoint = false;
@@ -559,7 +556,10 @@ export const storeSeason = async (season: Season, leagueID: number) => {
     });
 };
 
-export const addOrUpdateBywFixtureById = async (fixtureID: number, byw: BywCustom) => {
+export const addOrUpdateBywFixtureById = async (
+  fixtureID: number,
+  byw: BywCustom
+) => {
   await prisma.fixture.update({
     where: {
       id: fixtureID,
@@ -580,11 +580,9 @@ export const addOrUpdateBywFixtureById = async (fixtureID: number, byw: BywCusto
             indice: byw.indice,
             perf: byw.perf,
             rank: byw.rank,
-          }
-        }
-
-
+          },
+        },
       },
     },
   });
-}
+};
