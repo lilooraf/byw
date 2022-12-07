@@ -62,6 +62,13 @@ async function main() {
   await seedStandigns();
   console.log(`Standings Seeded.`);
   bywAlgo(100);
+  
+  // for (const u of userData) {
+  //   const user = await prisma.user.create({
+  //     data: u,
+  //   });
+  //   console.log(`Created user with id: ${user.id}`);
+  // }
   console.log(`Seeding finished.`);
 }
 
