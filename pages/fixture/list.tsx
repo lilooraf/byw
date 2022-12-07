@@ -17,9 +17,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       date: {
         gte: new Date(),
       },
-      // Byw: {
-      //   isNot: null,
-      // }
     },
     orderBy: {
       date: 'asc',

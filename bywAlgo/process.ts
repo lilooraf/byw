@@ -154,8 +154,6 @@ export const processFixture = async (fixture: Fixture) => {
   };
 
   addOrUpdateBywFixtureById(fixture.id, byw);
-
-  // storeFixture(fixture.fixture)
 };
 
 const getDomExtFixtures = (

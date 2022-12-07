@@ -1,6 +1,4 @@
 import React from 'react';
-import Router from 'next/router';
-import ReactMarkdown from 'react-markdown';
 import {
   Country,
   Fixture,
@@ -114,7 +112,13 @@ const Span: React.FC<{ fixture: Fixture; teamId: number }> = ({
   fixture,
   teamId,
 }) => {
-  if (!fixture || fixture.date > new Date() || (fixture.status_ != 'FT' && fixture.status_ != 'AET' && fixture.status_ != 'PEN')) {
+  if (
+    !fixture ||
+    fixture.date > new Date() ||
+    (fixture.status_ != 'FT' &&
+      fixture.status_ != 'AET' &&
+      fixture.status_ != 'PEN')
+  ) {
     return (
       <span className='flex justify-center items-center rounded-full bg-slate-400 h-4 w-4 text-sm text-slate-800'>
         <small>{fixture.status_}</small>

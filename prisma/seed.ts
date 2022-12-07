@@ -1,9 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { fetchLeagues } from '../api/fetch';
 import { seedFixtures, seedLeagues, seedStandigns } from '../api/logic';
 import { bywAlgo } from '../api/process';
-import { processFixture } from '../bywAlgo/process';
-// import { storeLeague } from "../api/store";
 
 const prisma = new PrismaClient();
 
