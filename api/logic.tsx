@@ -28,14 +28,14 @@ enum INFO {
   H2H_NUMBER = 40,
 }
 
-export const seedLeagues = async (leagueNB: number) => {
+export const seedLeagues = async (leagueNB?: number) => {
   console.log(`Seeding Leagues...`);
 
   let leagues = await fetchLeagues();
 
   let i = 0;
   for (const league of leagues) {
-    if (i > leagueNB - 1) return;
+    if (leagueNB !== undefined && i > leagueNB - 1) return;
     i++;
     await storeLeague(league);
   }

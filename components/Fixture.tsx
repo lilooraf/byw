@@ -361,18 +361,6 @@ const Fixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
           </div>
         </div>
       </td>
-      {/* <small>{fixture.TeamHome.name}</small>
-      <img className="h-3" src={fixture.TeamHome.logo} alt={`logo ${fixture.TeamHome.name}`} />
-      <h3>VS</h3>
-      <img className="h-3" src={fixture.TeamAway.logo} alt={`logo ${fixture.TeamAway.name}`} />
-      <small>{fixture.TeamAway.name}</small>
-
-      <small>{fixture.Venue?.name}</small>
-      <h4>{ fixture.Venue?.city }</h4>
-      <h4>{fixture.TeamHome.League.name}</h4>
-      <img className="h-3" src={fixture.TeamHome.League.logo} alt={`logo league ${fixture.TeamAway.name}`} />
-       */}
-      {/* <ReactMarkdown children={fixture.date} /> */}
     </tr>
   );
 };

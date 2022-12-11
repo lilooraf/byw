@@ -19,6 +19,39 @@ services:
         restart: 'always'
         networks:
             - api-networks
+    node:
+        container_name: byw_node
+        image: 'node:16.18.1'
+        expose:
+            - '${NODE_PORT}'
+        ports:
+            - '${NODE_PORT}:${NODE_PORT}'
+        environment:
+            LC_ALL: C.UTF-8
+            PORT: ${NODE_PORT}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+            POSTGRES_PORT: ${POSTGRES_PORT}
+            POSTGRES_HOST: ${POSTGRES_HOST}
+            GOOGLE_ID: ${GOOGLE_ID}
+            GOOGLE_SECRET: ${GOOGLE_SECRET}
+            API_KEY: ${API_KEY}
+            API_HOST: ${API_HOST}
+            API_URL: ${API_URL}
+            DATABASE_URL: ${DATABASE_URL}
+        env_file:
+            - .env
+        command: bash -c "npm install && npx next build && npx prisma generate && npx prisma migrate deploy && npm run start"
+        restart: 'always'
+        working_dir: /usr/src/app
+        volumes:
+            - .:/usr/src/app
+        networks:
+            - api-networks
+        depends_on:
+            - database
 
 networks:
     api-networks:
+        driver: bridge
