@@ -1,30 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import useOutsideCloser from '../hooks/useOutsideCloser';
 
 const Header: React.FC = () => {
+  const ref = useRef(null);
   const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
 
-  const hideUnhideById = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.style.display =
-        element.style.display === 'none' ? 'block' : 'none';
-    }
+  
+  const openMenu = () => {
+    const element = document.getElementById('dropdownAvatarName');
+    // if (element) {
+      element.style.display = 'block';
+    // }
   };
 
+  const closeMenu = () => {
+    const element = document.getElementById('dropdownAvatarName');
+    // if (element) {
+      element.style.display = 'none';
+    // }
+  };
+
+  useOutsideCloser(ref, closeMenu);
+  
   let left = (
     <div className='left'>
-      <Link href='/'>
+      {/* <Link href='/'>
         <a className='bold' data-active={isActive('/')}>
           Feed
         </a>
-      </Link>
+      </Link> */}
       <style jsx>{`
         .bold {
           font-weight: bold;
@@ -52,11 +63,11 @@ const Header: React.FC = () => {
   if (status === 'loading') {
     left = (
       <div className='left'>
-        <Link href='/'>
+        {/* <Link href='/'>
           <a className='bold' data-active={isActive('/')}>
             Feed
           </a>
-        </Link>
+        </Link> */}
         <style jsx>{`
           .bold {
             font-weight: bold;
@@ -124,11 +135,11 @@ const Header: React.FC = () => {
   if (session) {
     left = (
       <div className='left'>
-        <Link href='/'>
+        {/* <Link href='/'>
           <a className='bold' data-active={isActive('/')}>
             Feed
           </a>
-        </Link>
+        </Link> */}
         <Link href='/fixture/list'>
           <a data-active={isActive('/fixture/list')}>Fixtures</a>
         </Link>
@@ -154,7 +165,9 @@ const Header: React.FC = () => {
       </div>
     );
     right = (
-      <div className='right'>
+      <div
+        ref={ref}
+        className='right'>
         {/* <p>
           {session.user.name} ({session.user.email})
         </p> */}
@@ -162,7 +175,7 @@ const Header: React.FC = () => {
         <button
           id='dropdownAvatarNameButton'
           data-dropdown-toggle='dropdownAvatarName'
-          onClick={() => hideUnhideById('dropdownAvatarName')}
+          onClick={openMenu}
           className='flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white'
           type='button'
         >

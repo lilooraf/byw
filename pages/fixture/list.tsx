@@ -1,9 +1,59 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
 import Layout from '../../components/Layout';
-import Fixture, { FixtureProps } from '../../components/Fixture';
+import InLineFixture from '../../components/InLineFixture';
 import { useSession, getSession } from 'next-auth/react';
 import prisma from '../../lib/prisma';
+import {
+  Country,
+  Fixture,
+  League,
+  Prisma,
+  Team,
+  Venue,
+  Standing,
+  Byw,
+} from '@prisma/client';
+
+export type FixtureProps = {
+  id: number;
+  timezone: string;
+  date: Date;
+  timestamp: number;
+  leagueId: number;
+  venueId: number | null;
+  teamHomeId: number | null;
+  teamAwayId: number | null;
+  winnerHome: boolean | null;
+  winnerAway: boolean | null;
+  score: Prisma.JsonValue | null;
+  Byw: Byw;
+  League: League & {
+    Country: Country;
+  };
+} & {
+  TeamAway: Team & {
+    Standing: Standing;
+    Fixtures: Fixture[];
+    FixturesAway: Fixture[];
+    FixturesHome: Fixture[];
+    League: League & {
+      Country: Country;
+      // Standings: Standing[]
+    };
+  };
+  TeamHome: Team & {
+    Standing: Standing;
+    Fixtures: Fixture[];
+    FixturesAway: Fixture[];
+    FixturesHome: Fixture[];
+    League: League & {
+      Country: Country;
+      // Standings: Standing[]
+    };
+  };
+  Venue: Venue;
+};
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
@@ -21,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     orderBy: {
       date: 'asc',
     },
-    take: 100,
+    take: 10,
     include: {
       Byw: true,
       League: {
@@ -221,7 +271,6 @@ const Fixtures: React.FC<Props> = (props) => {
               <tr>
                 <th>Date</th>
                 <th>League</th>
-                <th>Confiance League</th>
                 <th>Match</th>
                 <th>Odd</th>
                 <th>Confiance Match</th>
@@ -229,7 +278,7 @@ const Fixtures: React.FC<Props> = (props) => {
             </thead>
             <tbody>
               {props.fixtures.map((fixture) => (
-                <Fixture fixture={fixture} />
+                <InLineFixture fixture={fixture} />
               ))}
             </tbody>
           </table>

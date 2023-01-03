@@ -24,8 +24,10 @@ services:
         image: 'node:16.18.1'
         expose:
             - '${NODE_PORT}'
+            - 5555
         ports:
             - '${NODE_PORT}:${NODE_PORT}'
+            - 5555:5555
         environment:
             LC_ALL: C.UTF-8
             PORT: ${NODE_PORT}
@@ -42,7 +44,7 @@ services:
             DATABASE_URL: ${DATABASE_URL}
         env_file:
             - .env
-        command: bash -c "npm install && npx next build && npx prisma generate && npx prisma migrate deploy && npm run start"
+        command: bash -c "npm install && npx next build && npx prisma generate && npx prisma migrate deploy && npm run dev"
         restart: 'always'
         working_dir: /usr/src/app
         volumes:
