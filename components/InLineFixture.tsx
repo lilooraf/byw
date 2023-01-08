@@ -8,19 +8,31 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
   return (
     // <div className="flex justify-between p-2 bg-inherit border" onClick={() => Router.push("/fixture/[id]", `/fixture/${fixture.id}`)}>
 
-    <tr className='rounded-sm border-b-2 border-gray-200'>
+    <tr className='rounded-sm border-b-2 border-gray-100 dark:border-gray-800'>
+      <td className='w-4 p-4'>
+        <div className='flex items-center'>
+          <input
+            id='checkbox-table-search-1'
+            type='checkbox'
+            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+          />
+          <label htmlFor='checkbox-table-search-1' className='sr-only'>
+            checkbox
+          </label>
+        </div>
+      </td>
       <td className='px-3'>
         <div className='align-middle text-center'>
           <small>
             {fixture.date.toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              year: 'numeric',
+              weekday: 'short',
               month: 'long',
               day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
             })}
           </small>
           <br />
-          <small>{fixture.date.toLocaleTimeString()}</small>
         </div>
       </td>
       <td className='px-3 space-y-3'>
@@ -41,9 +53,9 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
           <small>{fixture.League.name}</small>
         </div>
       </td>
-      <td className='w-96'>
+      <td className='px-3 w-96'>
         <table className='flex w-full justify-between my-2'>
-          <td>
+          <td className='px-3'>
             <div className='flex items-center space-x-1 justify-end mb-2 '>
               {/* TODO get just the standing of the team by leagueId */}
               <p>{`(${fixture.TeamHome.Standing[0].rank}) ${fixture.TeamHome.name}`}</p>
@@ -115,7 +127,7 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
               <small className='text-yellow-500'>VS</small>
             </span>
           </div>
-          <td>
+          <td className='px-3'>
             <div className='flex items-center space-x-1 justify-start mb-2'>
               <img
                 className='h-6 rounded-sm object-cover'
@@ -188,15 +200,15 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
           awayId={fixture.TeamAway.id}
         />
       </td>
-      <td>
+      <td className='px-8'>
         <div className='flex justify-center align-middle text-center'>
           <p>0</p>
         </div>
       </td>
-      <td>
+      <td className='px-5'>
         <div className='flex justify-center align-middle text-center'>
           <div
-            className='flex w-20 h-14 rounded-md justify-center text-center items-center border border-gray-200'
+            className='flex w-20 h-14 rounded-md justify-center text-center items-center border border-gray-200 dark:border-gray-800 dark:text-gray-800'
             style={{
               backgroundColor: perc2color(fixture.Byw?.indice!),
             }}

@@ -3,8 +3,8 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
 import prisma from '../../../lib/prisma'
+import GitHubProvider from 'next-auth/providers/github'
 // import Providers from "next-auth/providers";
-// import GitHubProvider from 'next-auth/providers/github'
 // import FacebookProvider from 'next-auth/providers/facebook'
 // import TwitterProvider from 'next-auth/providers/twitter'
 // import DiscordProvider from 'next-auth/providers/discord'
@@ -25,10 +25,10 @@ const options = {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    // GitHubProvider({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    // }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
     // FacebookProvider({
     //   clientId: process.env.FACEBOOK_ID,
     //   clientSecret: process.env.FACEBOOK_SECRET,

@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 import useOutsideCloser from '../hooks/useOutsideCloser';
 
 const Header: React.FC = () => {
@@ -12,51 +13,32 @@ const Header: React.FC = () => {
 
   const { data: session, status } = useSession();
 
-  
   const openMenu = () => {
     const element = document.getElementById('dropdownAvatarName');
     // if (element) {
-      element.style.display = 'block';
+    element.style.display = 'block';
     // }
+  };
+
+  const openCloseMenu = () => {
+    const element = document.getElementById('dropdownAvatarName');
+    if (element.style.display === 'block') {
+      element.style.display = 'none';
+    } else {
+      element.style.display = 'block';
+    }
   };
 
   const closeMenu = () => {
     const element = document.getElementById('dropdownAvatarName');
     // if (element) {
-      element.style.display = 'none';
+    element.style.display = 'none';
     // }
   };
 
   useOutsideCloser(ref, closeMenu);
-  
-  let left = (
-    <div className='left'>
-      {/* <Link href='/'>
-        <a className='bold' data-active={isActive('/')}>
-          Feed
-        </a>
-      </Link> */}
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
 
-        a {
-          text-decoration: none;
-          color: #000;
-          display: inline-block;
-        }
-
-        .left a[data-active='true'] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
-    </div>
-  );
+  let left = <div className='left'></div>;
 
   let right = null;
 
@@ -104,10 +86,13 @@ const Header: React.FC = () => {
   if (!session) {
     right = (
       <div className='right'>
+        <div className='p-1 rounded-md border border-black dark:border-white'>
+          
         <Link href='/api/auth/signin'>
           <a data-active={isActive('/signup')}>Log in</a>
         </Link>
-        <style jsx>{`
+        </div>
+        {/* <style jsx>{`
           a {
             text-decoration: none;
             color: #000;
@@ -127,86 +112,48 @@ const Header: React.FC = () => {
             padding: 0.5rem 1rem;
             border-radius: 3px;
           }
-        `}</style>
+        `}</style> */}
       </div>
     );
   }
 
   if (session) {
     left = (
-      <div className='left'>
-        {/* <Link href='/'>
-          <a className='bold' data-active={isActive('/')}>
+      <div className='left flex gap-3'>
+        <Link href='/'>
+          <a className='hover:text-gray-400' data-active={isActive('/')}>
             Feed
           </a>
-        </Link> */}
-        <Link href='/fixture/list'>
-          <a data-active={isActive('/fixture/list')}>Fixtures</a>
         </Link>
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
 
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
+        <Link href='/fixture/list'>
+          <a className='hover:text-gray-400' data-active={isActive('/fixture/list')}>Fixtures</a>
+        </Link>
       </div>
     );
     right = (
-      <div
-        ref={ref}
-        className='right'>
-        {/* <p>
-          {session.user.name} ({session.user.email})
-        </p> */}
-
+      <div ref={ref} className='right'>
         <button
           id='dropdownAvatarNameButton'
           data-dropdown-toggle='dropdownAvatarName'
-          onClick={openMenu}
-          className='flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white'
+          onClick={openCloseMenu}
+          className='m-0 p-0 flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white'
           type='button'
         >
           <span className='sr-only'>Open user menu</span>
           <img
-            className='mr-2 w-8 h-8 rounded-full'
+            className='w-11 h-11 rounded-full'
             src={session.user.image}
             alt='user photo'
           />
-          {session.user.name}
-          <svg
-            className='w-4 h-4 mx-1.5'
-            aria-hidden='true'
-            fill='currentColor'
-            viewBox='0 0 20 20'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              fill-rule='evenodd'
-              d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
-              clip-rule='evenodd'
-            ></path>
-          </svg>
         </button>
 
         <div
           id='dropdownAvatarName'
-          className='hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 absolute'
+          className='right-10 hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 absolute'
         >
           <div className='py-3 px-4 text-sm text-gray-900 dark:text-white'>
-            <div className='truncate'>{ session.user.email }</div>
+            <div className='truncate'>{session.user.email}</div>
           </div>
           <ul
             className='py-1 text-sm text-gray-700 dark:text-gray-200'
@@ -246,41 +193,29 @@ const Header: React.FC = () => {
             </a>
           </div>
         </div>
-
-        <div>
-          {/* <img className='rounded-full h-12' src={session.user.image} /> */}
-
-          {/* <Link href="/profile">
-          <button>
-            <a>Profile</a>
-          </button>
-        </Link> */}
-        </div>
-        {/* <Link href="/create">
-          <button>
-            <a>New post</a>
-          </button>
-        </Link> */}
-        <style jsx>{`
-          .right {
-            margin-left: auto;
-          }
-        `}</style>
       </div>
     );
   }
 
+  let logo = (
+    <div>
+      <Link href='/'>
+        <Image
+          src='/assets/icons/byw-logo.png'
+          alt='logo'
+          width='64'
+          height='40'
+          className='rounded-lg dark:invert-0 invert'
+        />
+      </Link>
+    </div>
+  );
+
   return (
-    <nav>
+    <nav className='flex justify-between items-center p-5'>
+      {logo}
       {left}
       {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
     </nav>
   );
 };

@@ -94,10 +94,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -117,10 +117,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -140,10 +140,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -173,10 +173,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -196,10 +196,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -219,10 +219,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
             },
             where: {
               date: {
-                lte: new Date()
+                lte: new Date(),
               },
               status_: {
-                not: undefined
+                not: undefined,
               },
             },
             orderBy: {
@@ -264,16 +264,37 @@ const Fixtures: React.FC<Props> = (props) => {
 
   return (
     <Layout>
-      <div className='page'>
-        <main>
+      <div className='page flex justify-center'>
+        <main className='w-full'>
           <table className='w-full'>
-            <thead>
-              <tr>
+            <caption className='mb-4 rounded-lg border dark:border-0 p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800'>
+              Our Filters
+              <p className='mt-1 text-sm font-normal text-gray-500 dark:text-gray-400'>
+                Here are the filters we use to find the best bets.
+              </p>
+            </caption>
+            <thead className='whitespace-nowraptext-xs uppercase bg-gray-100 dark:bg-gray-800 dark:text-white'>
+              <tr className='rounded-lg'>
+                <th className='w-4 p-4 rounded-l-lg'>
+                  <div className='flex items-center'>
+                    <input
+                      id='checkbox-table-search-1'
+                      type='checkbox'
+                      className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                    />
+                    <label
+                      htmlFor='checkbox-table-search-1'
+                      className='sr-only'
+                    >
+                      checkbox
+                    </label>
+                  </div>
+                </th>
                 <th>Date</th>
                 <th>League</th>
                 <th>Match</th>
-                <th>Odd</th>
-                <th>Confiance Match</th>
+                <th>Côte</th>
+                <th className='rounded-r-lg'>Confiance</th>
               </tr>
             </thead>
             <tbody>
