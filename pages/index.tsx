@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 const Home = (props) => {
   return (
     <Layout>
-      <div>Home</div>
     </Layout>
   );
 };
