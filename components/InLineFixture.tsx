@@ -6,8 +6,6 @@ import { FixtureProps } from '../pages/fixture/list';
 
 const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
   return (
-    // <div className="flex justify-between p-2 bg-inherit border" onClick={() => Router.push("/fixture/[id]", `/fixture/${fixture.id}`)}>
-
     <tr className='rounded-sm border-b-2 border-gray-100 dark:border-gray-800'>
       <td className='w-4 p-4'>
         <div className='flex items-center'>
