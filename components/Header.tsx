@@ -232,7 +232,7 @@ const Header: React.FC = () => {
       <div
         ref={menuRef}
         className={`${
-          showMenu ? 'w-40 backdrop-blur-sm bg-gray-500/10 dark:bg-black/10 shadow-lg' : 'w-0'
+          showMenu ? 'w-40 backdrop-blur-md bg-gray-500/10 dark:bg-black/10 shadow-lg' : 'w-0'
         } h-full fixed transition-all duration-150 z-40`}
       >
         <div
