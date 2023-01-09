@@ -232,17 +232,9 @@ const Header: React.FC = () => {
       <div
         ref={menuRef}
         className={`${
-          showMenu ? 'w-40' : 'w-0'
-        } h-full menu bg-gray-500/10 dark:bg-black/10 fixed transition-all duration-150 z-30 shadow-lg`}
+          showMenu ? 'w-40 backdrop-blur-sm bg-gray-500/10 dark:bg-black/10 shadow-lg' : 'w-0'
+        } h-full fixed transition-all duration-150 z-40`}
       >
-        <style jsx>{`
-          .menu {
-            backdrop-filter: blur(10px);
-          }
-          .menu::before {
-            backdrop-filter: blur(10px);
-          }
-        `}</style>
         <div
           className={`${
             showMenu ? 'visible' : 'invisible'
