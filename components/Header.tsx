@@ -16,7 +16,6 @@ const Header: React.FC = () => {
 
   const { data: session, status } = useSession();
 
-
   const openCloseMenuUser = () => {
     const element = document.getElementById('dropdownAvatarName');
     if (element.style.display === 'block') {
@@ -234,8 +233,16 @@ const Header: React.FC = () => {
         ref={menuRef}
         className={`${
           showMenu ? 'w-40' : 'w-0'
-        } h-full backdrop-blur-lg fixed transition-all duration-150 z-30 shadow-lg`}
+        } h-full menu bg-gray-500/10 dark:bg-black/10 fixed transition-all duration-150 z-30 shadow-lg`}
       >
+        <style jsx>{`
+          .menu {
+            backdrop-filter: blur(10px);
+          }
+          .menu::before {
+            backdrop-filter: blur(10px);
+          }
+        `}</style>
         <div
           className={`${
             showMenu ? 'visible' : 'invisible'
