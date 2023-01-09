@@ -120,11 +120,11 @@ const Header: React.FC = () => {
   if (session) {
     left = (
       <div className='left flex gap-3'>
-        <Link href='/'>
+        {/* <Link href='/'>
           <a className='hover:text-gray-400' data-active={isActive('/')}>
             Feed
           </a>
-        </Link>
+        </Link> */}
 
         <Link href='/fixture/list'>
           <a className='hover:text-gray-400' data-active={isActive('/fixture/list')}>Fixtures</a>
