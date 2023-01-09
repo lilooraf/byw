@@ -2,10 +2,10 @@ import React, { ReactNode } from 'react';
 import Header from './Header';
 
 const Loader: React.FC = () => (
-  <div role='status' className='absolute top-1/2 left-1/2'>
+  <div role='status' className='flex justify-center'>
     <svg
       aria-hidden='true'
-      className='w-10 h-10 mr-2 text-gray-200 animate-spin dark:text-gray-600 dark:fill-slate-300 fill-black'
+      className='w-10 h-10 text-gray-200 animate-spin dark:text-gray-600 dark:fill-slate-300 fill-black'
       viewBox='0 0 100 101'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'

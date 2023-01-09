@@ -4,23 +4,20 @@ import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import useOutsideCloser from '../hooks/useOutsideCloser';
+import { useState } from 'react';
 
 const Header: React.FC = () => {
-  const ref = useRef(null);
+  const menuUserRef = useRef(null);
+  const menuRef = useRef(null);
   const router = useRouter();
+  const [showMenu, setShowMenu] = useState(false);
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
 
-  const openMenu = () => {
-    const element = document.getElementById('dropdownAvatarName');
-    // if (element) {
-    element.style.display = 'block';
-    // }
-  };
 
-  const openCloseMenu = () => {
+  const openCloseMenuUser = () => {
     const element = document.getElementById('dropdownAvatarName');
     if (element.style.display === 'block') {
       element.style.display = 'none';
@@ -29,21 +26,26 @@ const Header: React.FC = () => {
     }
   };
 
-  const closeMenu = () => {
+  const closeMenuUser = () => {
     const element = document.getElementById('dropdownAvatarName');
     // if (element) {
     element.style.display = 'none';
     // }
   };
 
-  useOutsideCloser(ref, closeMenu);
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
 
-  let left = <div className='left'></div>;
+  useOutsideCloser(menuUserRef, closeMenuUser);
+  useOutsideCloser(menuRef, closeMenu);
+
+  let menu = <div className='left'></div>;
 
   let right = null;
 
   if (status === 'loading') {
-    left = (
+    menu = (
       <div className='left'>
         {/* <Link href='/'>
           <a className='bold' data-active={isActive('/')}>
@@ -87,10 +89,9 @@ const Header: React.FC = () => {
     right = (
       <div className='right'>
         <div className='p-1 rounded-md border border-black dark:border-white'>
-          
-        <Link href='/api/auth/signin'>
-          <a data-active={isActive('/signup')}>Log in</a>
-        </Link>
+          <Link href='/api/auth/signin'>
+            <a data-active={isActive('/signup')}>Log in</a>
+          </Link>
         </div>
         {/* <style jsx>{`
           a {
@@ -118,25 +119,41 @@ const Header: React.FC = () => {
   }
 
   if (session) {
-    left = (
-      <div className='left flex gap-3'>
-        {/* <Link href='/'>
-          <a className='hover:text-gray-400' data-active={isActive('/')}>
-            Feed
-          </a>
-        </Link> */}
-
-        <Link href='/fixture/list'>
-          <a className='hover:text-gray-400' data-active={isActive('/fixture/list')}>Fixtures</a>
-        </Link>
+    menu = (
+      <div className=''>
+        <button
+          data-collapse-toggle='navbar-hamburger'
+          type='button'
+          className='inline-flex items-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+          aria-controls='navbar-hamburger'
+          aria-expanded='false'
+          onClick={() => {
+            setShowMenu(!showMenu);
+          }}
+        >
+          <span className='sr-only'>Open main menu</span>
+          <svg
+            className='w-6 h-6'
+            aria-hidden='true'
+            fill='currentColor'
+            viewBox='0 0 20 20'
+            xmlns='http://www.w3.org/2000/svg'
+          >
+            <path
+              fill-rule='evenodd'
+              d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
+              clip-rule='evenodd'
+            ></path>
+          </svg>
+        </button>
       </div>
     );
     right = (
-      <div ref={ref} className='right'>
+      <div ref={menuUserRef} className='right'>
         <button
           id='dropdownAvatarNameButton'
           data-dropdown-toggle='dropdownAvatarName'
-          onClick={openCloseMenu}
+          onClick={openCloseMenuUser}
           className='m-0 p-0 flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:mr-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white'
           type='button'
         >
@@ -198,25 +215,72 @@ const Header: React.FC = () => {
   }
 
   let logo = (
-    <div>
+    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
       <Link href='/'>
         <Image
           src='/assets/icons/byw-logo.png'
           alt='logo'
           width='64'
           height='40'
-          className='rounded-lg dark:invert-0 invert'
+          className='rounded-lg dark:invert-0 invert cursor-pointer'
         />
       </Link>
     </div>
   );
 
   return (
-    <nav className='flex justify-between items-center p-5'>
-      {logo}
-      {left}
-      {right}
-    </nav>
+    <div>
+      <div
+        ref={menuRef}
+        className={`${
+          showMenu ? 'w-40' : 'w-0'
+        } h-full backdrop-blur-lg fixed transition-all duration-150 z-30 shadow-lg`}
+      >
+        <div
+          className={`${
+            showMenu ? 'visible' : 'invisible'
+          } flex flex-col items-center justify-between h-full py-5`}
+        >
+          <div className='flex flex-col space-y-4 mt-6 items-center'>
+            <div>
+              <Link href='/'>
+                <a
+                  className='hover:text-gray-400'
+                  data-active={isActive('/fixture/list')}
+                >
+                  Home
+                </a>
+              </Link>
+            </div>
+            <div>
+              <Link href='/fixture/list'>
+                <a
+                  className='hover:text-gray-400'
+                  data-active={isActive('/fixture/list')}
+                >
+                  Fixtures
+                </a>
+              </Link>
+            </div>
+          </div>
+
+          <div className='' onClick={() => signOut()}>
+            <a
+              href='#'
+              className='block rounded-md p-2 text-sm text-gray-700 hover:bg-red-600 dark:hover:bg-red-600 dark:text-gray-200 dark:hover:text-white'
+            >
+              Sign out
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <nav className='relative flex justify-between items-center px-6 py-4'>
+        {menu}
+        {logo}
+        {right}
+      </nav>
+    </div>
   );
 };
 
