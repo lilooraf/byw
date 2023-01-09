@@ -18,8 +18,8 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   return (
     <SessionProvider session={pageProps.session}>
-      {loaging && <Loader />}
       <Component {...pageProps} />
+      {loaging && <Loader />}
     </SessionProvider>
   );
 };
