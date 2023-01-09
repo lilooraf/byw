@@ -12,7 +12,7 @@ export const FixtureStatusForTeam: React.FC<{ fixture: Fixture; teamId: number }
         fixture.status_ != 'PEN')
     ) {
       return (
-        <span className='flex justify-center items-center rounded-full bg-slate-400 h-4 w-4 text-sm text-white dark:text-gray-800'>
+        <span className='flex justify-center items-center rounded-full bg-slate-400 h-3 w-3 md:h-4 md:w-4 text-xs md:text-sm text-white dark:text-gray-800'>
           <small>{fixture.status_}</small>
         </span>
       );
@@ -22,7 +22,7 @@ export const FixtureStatusForTeam: React.FC<{ fixture: Fixture; teamId: number }
       (fixture?.winnerAway && fixture?.teamAwayId === teamId)
     ) {
       return (
-        <span className='flex justify-center items-center rounded-full bg-green-600 h-4 w-4 text-sm text-white dark:text-gray-800'>
+        <span className='flex justify-center items-center rounded-full bg-green-600 h-3 w-3 md:h-4 md:w-4 text-xs md:text-sm text-white dark:text-gray-800'>
           <small>V</small>
         </span>
       );
@@ -31,13 +31,13 @@ export const FixtureStatusForTeam: React.FC<{ fixture: Fixture; teamId: number }
       (fixture?.winnerHome && fixture?.teamAwayId === teamId)
     ) {
       return (
-        <span className='flex justify-center items-center rounded-full bg-red-600 h-4 w-4 text-sm text-white dark:text-gray-800'>
+        <span className='flex justify-center items-center rounded-full bg-red-600 h-3 w-3 md:h-4 md:w-4 text-xs md:text-sm text-white dark:text-gray-800'>
           <small>D</small>
         </span>
       );
     } else {
       return (
-        <span className='flex justify-center items-center rounded-full bg-yellow-600 h-4 w-4 text-sm text-white dark:text-gray-800'>
+        <span className='flex justify-center items-center rounded-full bg-yellow-600 h-3 w-3 md:h-4 md:w-4 text-xs md:text-sm text-white dark:text-gray-800'>
           <small>N</small>
         </span>
       );

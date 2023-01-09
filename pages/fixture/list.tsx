@@ -273,9 +273,9 @@ const Fixtures: React.FC<Props> = (props) => {
                 Here are the filters we use to find the best bets.
               </p>
             </caption>
-            <thead className='whitespace-nowraptext-xs uppercase bg-gray-100 dark:bg-gray-800 dark:text-white'>
-              <tr className='rounded-lg'>
-                <th className='w-4 p-4 rounded-l-lg'>
+            <thead className='whitespace-nowraptext-xs uppercase text-sm md:text-md bg-gray-100 dark:bg-gray-800 dark:text-white'>
+              <tr className='h-8 md:h-12'>
+                <th className='hidden w-4 p-4 rounded-l-lg lg:table-cell'>
                   <div className='flex items-center'>
                     <input
                       id='checkbox-table-search-1'
@@ -290,11 +290,11 @@ const Fixtures: React.FC<Props> = (props) => {
                     </label>
                   </div>
                 </th>
-                <th>Date</th>
-                <th>League</th>
-                <th>Match</th>
-                <th>Côte</th>
-                <th className='rounded-r-lg'>Confiance</th>
+                <th className='rounded-l-lg md:rounded-none hidden sm:table-cell'>Date</th>
+                <th className='hidden md:table-cell'>League</th>
+                <th className='rounded-l-lg sm:rounded-none'>Match</th>
+                <th className='hidden lg:table-cell'>Côte</th>
+                <th className='rounded-r-lg'>Indice</th>
               </tr>
             </thead>
             <tbody>
