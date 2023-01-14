@@ -46,10 +46,7 @@ const Header: React.FC<Props> = (props) => {
   let right = null;
 
   if (status === 'loading') {
-    menu = (
-      <div className='left'>
-      </div>
-    );
+    menu = <div className='left'></div>;
     right = (
       <div className='right'>
         <p>Validating session ...</p>
@@ -182,7 +179,9 @@ const Header: React.FC<Props> = (props) => {
           alt='logo'
           width='64'
           height='40'
-          className={`rounded-lg invert dark:invert-0 cursor-pointer ${props.loading ? 'animate-pulse' : ''}`}
+          className={`dark:invert-0 invert rounded-lg cursor-pointer ${
+            props.loading ? 'animate-pulse' : ''
+          }`}
         />
       </Link>
     </div>
@@ -193,44 +192,44 @@ const Header: React.FC<Props> = (props) => {
       <div
         ref={menuRef}
         className={`${
-          showMenu ? 'w-40 backdrop-blur-md bg-gray-500/10 dark:bg-black/10 shadow-lg' : 'w-0'
+          showMenu
+            ? 'w-40 backdrop-blur-md bg-gray-500/10 dark:bg-black/10 shadow-lg'
+            : 'w-0'
         } h-full fixed transition-all duration-150 z-40`}
       >
         <div
           className={`${
             showMenu ? 'visible' : 'invisible'
-          } flex flex-col items-center justify-between h-full py-5`}
+          } flex flex-col items-center justify-between h-full py-5 select-none`}
         >
-          <div className='flex flex-col space-y-4 mt-6 items-center'>
-            <div>
-              <Link href='/'>
-                <a
-                  className='hover:text-gray-400'
-                  data-active={isActive('/fixture/list')}
-                >
-                  Home
-                </a>
-              </Link>
-            </div>
-            <div>
-              <Link href='/fixture/list'>
-                <a
-                  className='hover:text-gray-400'
-                  data-active={isActive('/fixture/list')}
-                >
-                  Fixtures
-                </a>
-              </Link>
-            </div>
+          <div className='flex flex-col space-y-4 mt-6 items-center cursor-pointer'>
+            <Link href='/'>
+              <div
+                className={`py-2 w-24 bg-white bg-opacity-50 dark:bg-black rounded-md text-center hover:bg-slate-200 hover:dark:bg-slate-800 ${
+                  isActive('/') ? 'border border-black dark:border-white' : ''
+                }`}
+              >
+                Home
+              </div>
+            </Link>
+            <Link href='/fixture/list'>
+              <div
+                className={`py-2 w-24 bg-white bg-opacity-50 dark:bg-black rounded-md text-center hover:bg-slate-200 hover:dark:bg-slate-800 ${
+                  isActive('/fixture/list')
+                    ? 'border border-black dark:border-white'
+                    : ''
+                }`}
+              >
+                Fixtures
+              </div>
+            </Link>
           </div>
 
-          <div className='' onClick={() => signOut()}>
-            <a
-              href='#'
-              className='block rounded-md p-2 text-sm text-gray-700 hover:bg-red-600 dark:hover:bg-red-600 dark:text-gray-200 dark:hover:text-white'
-            >
-              Sign out
-            </a>
+          <div
+            className='py-2 w-24 bg-white bg-opacity-50 dark:bg-black rounded-md text-center hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white text-gray-700 cursor-pointer'
+            onClick={() => signOut()}
+          >
+            Sign out
           </div>
         </div>
       </div>

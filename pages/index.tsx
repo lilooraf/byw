@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const Home = (props) => {
   return (
-    <div className=''>
+    <div className='bg-black text-white'>
       <div className=''>
         <div className='z-10 whitespace-nowrap absolute flex justify-center md:w-1/2 w-full md:mt-32 mt-3 text-transparent bg-clip-text bg-gradient-to-br from-white to-orange-600'>
           <div>
@@ -24,7 +24,7 @@ const Home = (props) => {
         </div>
       </div>
       <div className=''>
-        <div className='mt-8 md:mt-32 pb-10'>
+        <div className='mt-8 md:mt-32 pb-20'>
           <div className='text-center px-10'>
             <p className='text-3xl font-bold inline'>What is&nbsp;</p>
             <p className='text-3xl font-bold inline text-transparent bg-clip-text bg-gradient-to-tl from-white to-orange-600'>
