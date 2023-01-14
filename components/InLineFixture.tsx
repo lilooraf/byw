@@ -59,15 +59,23 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
           awayId={fixture.TeamAway.id}
         />
       </td>
-      <td className='px-8 hidden lg:table-cell'>
-        <div className='flex justify-center align-middle text-center'>
-          <p>0</p>
+      <td className='px-2 hidden lg:table-cell'>
+        <div className='flex justify-center align-middle text-center text-xs font-mono'>
+          <div className='flex px-2 py-1 bg-gray-800 border-gray-600 border-r-2 rounded-l-md border font-bold'>
+            1.12
+          </div>
+          <div className='flex px-2 py-1 bg-gray-800 border-gray-600'>
+            0.21
+          </div>
+          <div className='flex px-2 py-1 bg-gray-800 border-gray-600 border-l-2 rounded-r-md'>
+            0.47
+          </div>
         </div>
       </td>
       <td className='px-3 sm:px-5'>
         <div className='flex justify-center align-middle text-center'>
           <div
-            className='flex w-10 h-8 md:w-16 md:h-14 lg:w-20 lg:h-14 rounded-md justify-center text-center items-center border border-gray-200 dark:border-gray-800 dark:text-gray-800'
+            className='flex w-10 h-8 md:w-16 md:h-14 lg:w-20 lg:h-14 rounded-md justify-center text-center items-center border border-gray-200 dark:border-gray-800 dark:text-gray-800 font-mono'
             style={{
               backgroundColor: perc2color(fixture.Byw?.indice!),
             }}

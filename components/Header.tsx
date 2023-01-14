@@ -81,7 +81,7 @@ const Header: React.FC<Props> = (props) => {
         <button
           data-collapse-toggle='navbar-hamburger'
           type='button'
-          className='inline-flex items-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+          className='p-2 inline-flex items-center text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
           aria-controls='navbar-hamburger'
           aria-expanded='false'
           onClick={() => {
@@ -176,7 +176,7 @@ const Header: React.FC<Props> = (props) => {
   }
 
   let logo = (
-    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+    <div className='absolute flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
       <Link href='/'>
         <Image
           src='/assets/icons/byw-logo.png'
@@ -192,7 +192,7 @@ const Header: React.FC<Props> = (props) => {
   );
 
   return (
-    <div>
+    <div className='sticky top-0 z-30 bg-gradient-to-b from-white dark:from-black via-white dark:via-black to-transparent'>
       <div
         ref={menuRef}
         className={`${
@@ -204,7 +204,7 @@ const Header: React.FC<Props> = (props) => {
         <div
           className={`${
             showMenu ? 'visible' : 'invisible'
-          } flex flex-col items-center justify-between h-full py-5 select-none`}
+          } flex flex-col items-center justify-between h-full py-5 select-none `}
         >
           <div className='flex flex-col space-y-4 mt-6 items-center cursor-pointer'>
             <Link href='/'>

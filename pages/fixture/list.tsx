@@ -59,6 +59,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     'Cache-Control',
     'public, s-maxage=10, stale-while-revalidate=59'
   )
+
   const session = await getSession({ req });
   if (!session) {
     return {
@@ -247,7 +248,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       Venue: true,
     },
   });
-
+  
   return {
     props: { fixtures: fixtures },
   };
@@ -296,7 +297,7 @@ const Fixtures: React.FC<Props> = (props) => {
               </th>
               <th className='hidden md:table-cell'>League</th>
               <th className='rounded-l-lg sm:rounded-none'>Match</th>
-              <th className='hidden lg:table-cell'>Côte</th>
+              <th className='hidden lg:table-cell'>Odd</th>
               <th className='rounded-r-lg'>Indice</th>
             </tr>
           </thead>
