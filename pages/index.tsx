@@ -1,8 +1,17 @@
-import React from 'react';
-import Layout from '../components/Layout';
+import React, { useRef } from 'react';
 import Image from 'next/image';
 
 const Home = (props) => {
+  const ref = useRef(null);
+
+  const addOpacity = () => {
+    ref.current.classList.add('opacity-100');
+  };
+
+  const removeOpacity = () => {
+    ref.current.classList.remove('opacity-0');
+  };
+
   return (
     <div className='bg-black text-white'>
       <div className=''>
@@ -15,8 +24,12 @@ const Home = (props) => {
         </div>
       </div>
       <div className='w-full flex justify-center'>
-        <div className='md:px-20 mt-40 md:mt-0 max-w-[70rem] md:max-w-80'>
+        <div
+          ref={ref}
+          className='md:px-20 mt-40 md:mt-0 max-w-[70rem] md:max-w-80 transition-opacity delay-150 duration-1000 opacity-0'>
           <Image
+            onLoad={removeOpacity}
+            onLoadingComplete={addOpacity}
             src='/assets/wallpapers/background.png'
             width={1920}
             height={1280}
