@@ -2,125 +2,16 @@ import { Prisma } from '@prisma/client';
 import { BywCustom } from '../bywAlgo/process';
 import prisma from '../lib/prisma';
 import { getFromDBLeagueById } from './getFromDB';
-import { Country, Fixture, LeagueData, Standing, Season } from './types';
-
-export const storeStandingsd = async (standingsData: Standing[]) => {
-  if (!standingsData) return;
-
-  standingsData.forEach((data) => {
-    getFromDBLeagueById(data.league.id).then((league) => {
-      // console.log(data, league.seasons);
-      data.league.standings.forEach((st) => {
-        st.forEach(async (standing) => {
-          // console.log(data.league);
-          await prisma.standing
-            .findFirstOrThrow({
-              where: {
-                Team: {
-                  name: standing.team.name,
-                },
-                leagueId: data.league.id,
-                Season: {
-                  year: data.league.season,
-                },
-              },
-              select: {
-                id: true,
-              },
-            })
-            .then((sdelete) => {
-              if (sdelete.id) {
-                prisma.standing.delete({
-                  where: {
-                    id: sdelete.id,
-                  },
-                });
-              }
-            })
-            .catch((error) => {
-              // console.error(error);
-            });
-          await prisma.standing
-            .create({
-              data: {
-                rank: standing.rank,
-                goalsDiff: standing.goalsDiff,
-                points: standing.points,
-                Season: {
-                  connectOrCreate: {
-                    where: {
-                      year: data.league.season,
-                    },
-                    create: {
-                      year: data.league.season,
-                      Leagues: {
-                        connect: {
-                          id: data.league.id,
-                        },
-                      },
-                    },
-                  },
-                },
-                League: {
-                  connectOrCreate: {
-                    where: {
-                      id: data.league.id,
-                    },
-                    create: {
-                      id: league.league.id,
-                      logo: league.league.logo,
-                      name: league.league.name,
-                      type: league.league.type,
-                      Country: {
-                        connectOrCreate: {
-                          where: {
-                            code: league.country.code,
-                          },
-                          create: {
-                            code: league.country.code,
-                            flag: league.country.flag,
-                            name: league.country.name,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-                Team: {
-                  connect: {
-                    id: standing.team.id,
-                  },
-                },
-                score: {
-                  all: standing.all,
-                  home: standing.home,
-                  away: standing.away,
-                },
-              },
-            })
-            .then(() => {
-              // console.log("Standings stored");
-            })
-            .catch((error) => {
-              console.error(error);
-              console.log(standing);
-            });
-        });
-      });
-    });
-  });
-};
+import { Country, Fixture, LeagueData, Standing, Season, StandingData } from './types';
 
 export const storeStandings = async (standingsData: Standing[]) => {
   if (!standingsData) return;
   let error = false;
 
   standingsData.forEach((data) => {
-    getFromDBLeagueById(data.league.id).then((league) => {
-      // console.log(data, league.seasons);
-      data.league.standings.forEach((st) => {
-        st.forEach(async (standing) => {
-          // console.log(data.league);
+    getFromDBLeagueById(data.league.id).then((league: LeagueData) => {
+      data.league.standings.forEach((standingsData: StandingData[]) => {
+        standingsData.forEach(async (standing: StandingData) => {
           await prisma.standing
             .findFirstOrThrow({
               where: {
@@ -146,7 +37,7 @@ export const storeStandings = async (standingsData: Standing[]) => {
               }
             })
             .catch((error) => {
-              // console.error(error);
+              console.error('storeStandings - ', error);
             });
 
           if (standing.team.id) {
@@ -208,7 +99,8 @@ export const storeStandings = async (standingsData: Standing[]) => {
                   },
                 },
               })
-              .catch(() => {
+              .catch((err) => {
+                console.log('storeStandings - connet to Team by id', err);
                 error = true;
               });
           } else {
@@ -283,14 +175,14 @@ export const storeStandings = async (standingsData: Standing[]) => {
                       },
                     },
                   })
-                  .catch((error) => {
-                    console.error(error);
+                  .catch((err) => {
+                    console.error('storeStandings - connet to Team by name', err);
                     console.log(standing);
                   });
               })
               .catch(() => {
                 if (error) {
-                  console.log(
+                  console.error(
                     'Team not found ',
                     standing.team.name,
                     standing.team.id
@@ -304,40 +196,8 @@ export const storeStandings = async (standingsData: Standing[]) => {
   });
 };
 
-const hasWin = (score: Prisma.JsonValue, home: boolean): boolean | null => {
-  var homePoint = false;
-  var awayPoint = false;
-  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
-
-  moments.forEach((moment) => {
-    if (!homePoint && !awayPoint && score[moment].home != null) {
-      if (score[moment].home > score[moment].away) homePoint = true;
-      if (score[moment].home < score[moment].away) awayPoint = true;
-      if (score[moment].home === score[moment].away) {
-        homePoint = false;
-        awayPoint = false;
-      }
-    }
-  });
-  return home ? homePoint : awayPoint;
-};
-
-const finalScore = (score: Prisma.JsonValue, home: boolean): number => {
-  var homePoint = 0;
-  var awayPoint = 0;
-  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
-
-  moments.forEach((moment) => {
-    if (!homePoint && !awayPoint && score[moment].home != null) {
-      homePoint = score[moment].home;
-      awayPoint = score[moment].away;
-    }
-  });
-  return home ? homePoint : awayPoint;
-};
-
 export const storeFixture = async (fixture: Fixture) => {
-  const res = prisma.fixture.upsert({
+  await prisma.fixture.upsert({
     where: {
       id: fixture.fixture.id,
     },
@@ -446,36 +306,26 @@ export const storeFixture = async (fixture: Fixture) => {
       winnerHome: fixture.teams.home.winner,
       score: fixture.score,
     },
+  }).catch((err) => {
+    console.error('storeFixture', err);
   });
 
-  return await prisma
-    .$transaction([res])
-    .then((res) => {
-      // console.log(res);
-      // console.log("Fixture " + fixture.fixture.id + " succesfully stored.");
-    })
-    .catch((err) => {
-      // if (err.code != "P2002") {
-      //   console.log(err);
-      //   console.log(fixture);
-      // }
-    });
-};
-
-export const storeCountries = async (countries: Country[]) => {
-  countries.push({
-    name: 'World',
-    code: 'WORLD',
-    flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/International_Flag_of_Planet_Earth.svg/1599px-International_Flag_of_Planet_Earth.svg.png',
-  });
-
-  prisma.country.createMany({
-    data: countries,
-  });
+  // return await prisma
+  //   .$transaction([res])
+  //   .then((res) => {
+  //     // console.log(res);
+  //     // console.log("Fixture " + fixture.fixture.id + " succesfully stored.");
+  //   })
+  //   .catch((err) => {
+  //     // if (err.code != "P2002") {
+  //     //   console.log(err);
+  //     //   console.log(fixture);
+  //     // }
+  //   });
 };
 
 export const storeCountry = async (country: Country) => {
-  return await prisma.country
+  await prisma.country
     .upsert({
       where: {
         code: country.code,
@@ -489,7 +339,9 @@ export const storeCountry = async (country: Country) => {
         flag: country.flag,
       },
     })
-    .catch((err) => {});
+    .catch((err) => {
+      console.error('storeCountry', err);
+    });
 };
 
 export const storeLeague = async (league: LeagueData) => {
@@ -520,6 +372,8 @@ export const storeLeague = async (league: LeagueData) => {
     where: {
       id: league.league.id,
     },
+  }).catch((err) => {
+    console.error('storeLeague', err);
   });
 
   league.seasons.forEach(async (season) => {
@@ -528,7 +382,7 @@ export const storeLeague = async (league: LeagueData) => {
 };
 
 export const storeSeason = async (season: Season, leagueID: number) => {
-  prisma.season
+  await prisma.season
     .upsert({
       create: {
         year: season.year,
@@ -551,8 +405,7 @@ export const storeSeason = async (season: Season, leagueID: number) => {
       },
     })
     .catch((err) => {
-      // console.log(err);
-      // console.log(season);
+      console.log(err);
     });
 };
 
@@ -585,4 +438,36 @@ export const addOrUpdateBywFixtureById = async (
       },
     },
   });
+};
+
+const hasWin = (score: Prisma.JsonValue, home: boolean): boolean | null => {
+  var homePoint = false;
+  var awayPoint = false;
+  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
+
+  moments.forEach((moment: string) => {
+    if (!homePoint && !awayPoint && score[moment].home != null) {
+      if (score[moment].home > score[moment].away) homePoint = true;
+      if (score[moment].home < score[moment].away) awayPoint = true;
+      if (score[moment].home === score[moment].away) {
+        homePoint = false;
+        awayPoint = false;
+      }
+    }
+  });
+  return home ? homePoint : awayPoint;
+};
+
+const finalScore = (score: Prisma.JsonValue, home: boolean): number => {
+  var homePoint = 0;
+  var awayPoint = 0;
+  const moments = ['penalty', 'extratime', 'fulltime', 'halftime'];
+
+  moments.forEach((moment: string) => {
+    if (!homePoint && !awayPoint && score[moment].home != null) {
+      homePoint = score[moment].home;
+      awayPoint = score[moment].away;
+    }
+  });
+  return home ? homePoint : awayPoint;
 };

@@ -81,15 +81,15 @@ const bywAlgoInfo = {
   },
 };
 
-export const processFixture = async (fixture: Fixture) => {
+export const bywAlgoFixture = async (fixture: Fixture) => {
   const teamHomeId = fixture.teamHomeId;
   const teamAwayId = fixture.teamAwayId;
   let homeFixtures: FixtureCustom[] = [];
   let awayFixtures: FixtureCustom[] = [];
 
   try {
-    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 100);
-    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 100);
+    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 100, ['FT', 'AET', 'PEN']);
+    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 100, ['FT', 'AET', 'PEN']);
   } catch (e) {
     throw e;
   }
@@ -112,8 +112,6 @@ export const processFixture = async (fixture: Fixture) => {
       part.performanceWeight
     );
   });
-  // console.log('Rank:' + rank.toString());
-  // console.log('Perf:' + perf.toString());
 
   let homeDomFixtures = getDomExtFixtures(homeFixtures, teamHomeId, true);
   let awayExtFixtures = getDomExtFixtures(awayFixtures, teamAwayId, false);
@@ -132,18 +130,25 @@ export const processFixture = async (fixture: Fixture) => {
     );
   });
 
-  // console.log('DomExt Rank:' + domextrank.toString());
-  // console.log('DomExt Perf:' + domextperf.toString());
-
   let result = (domextrank + domextperf + rank + perf) * (1 / 3 + 1);
-
-  // console.log('Result: ' + result.toString());
 
   // Head To Head
 
   // To do
 
-  if (!result || !rank || !perf || !domextrank || !domextperf) throw 'Error in BywAlgo processFixture result null ' + fixture.id + ' homeFixtures: ' + homeFixtures.length + ' awayFixtures: ' + awayFixtures.length + ' homeDomFixtures: ' + homeDomFixtures.length + ' awayExtFixtures: ' + awayExtFixtures.length;
+  if (!result || !rank || !perf || !domextrank || !domextperf)
+    throw (
+      'Error in BywAlgo bywAlgoFixture result null ' +
+      fixture.id +
+      ' homeFixtures: ' +
+      homeFixtures.length +
+      ' awayFixtures: ' +
+      awayFixtures.length +
+      ' homeDomFixtures: ' +
+      homeDomFixtures.length +
+      ' awayExtFixtures: ' +
+      awayExtFixtures.length
+    );
 
   const byw: BywCustom = {
     indice: result,

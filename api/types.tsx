@@ -129,7 +129,7 @@ export type LeagueData = {
 };
 
 export type Venue = {
-  id: number | null;
+  id: number | null;
   name: string;
   address: string | null;
   city: string | null;

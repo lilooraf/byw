@@ -1,4 +1,4 @@
-import { Country, League, Season } from '@prisma/client';
+import { Country, League, Prisma, Season } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { LeagueData, Venue } from './types';
 
@@ -13,14 +13,26 @@ export const getFromDBLeagues = async (): Promise<
       Country: true,
       Season: true,
     },
+  }).catch((error) => {
+    console.error(error);
+    return [];
   });
   return leagues;
 };
 
 export const getLastFixturesByTeamId = async (
   teamId: number,
-  number: number
-) => {
+  number: number,
+  status: string[]
+): Promise<
+  {
+    id: number;
+    TeamHome: {
+      id: number;
+    };
+    score: Prisma.JsonValue;
+  }[]
+> => {
   const fixtures = await prisma.fixture.findMany({
     where: {
       OR: [
@@ -32,7 +44,7 @@ export const getLastFixturesByTeamId = async (
         },
       ],
       status_: {
-        in: ['FT', 'AET', 'PEN'],
+        in: status,
       },
       date: {
         lte: new Date(),
@@ -52,6 +64,9 @@ export const getLastFixturesByTeamId = async (
         },
       },
     },
+  }).catch((error) => {
+    console.error(error);
+    return null;
   });
 
   return fixtures;

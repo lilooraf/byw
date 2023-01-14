@@ -1,6 +1,5 @@
 import React from 'react';
 import { GetServerSideProps } from 'next';
-import Layout from '../../components/Layout';
 import InLineFixture from '../../components/InLineFixture';
 import { useSession, getSession } from 'next-auth/react';
 import prisma from '../../lib/prisma';
@@ -58,8 +57,12 @@ export type FixtureProps = {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getSession({ req });
   if (!session) {
-    res.statusCode = 403;
-    return { props: { fixtures: [] } };
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
   }
 
   const fixtures = await prisma.fixture.findMany({
@@ -255,57 +258,52 @@ const Fixtures: React.FC<Props> = (props) => {
 
   if (!session) {
     return (
-      <Layout>
-        <h1>Fixtures</h1>
-        <div>You need to be authenticated to view this page.</div>
-      </Layout>
+      <div>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className='page flex justify-center'>
-        <main className='w-full'>
-          <table className='w-full'>
-            <caption className='mb-4 rounded-lg border dark:border-0 p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800'>
-              Our Filters
-              <p className='mt-1 text-sm font-normal text-gray-500 dark:text-gray-400'>
-                Here are the filters we use to find the best bets.
-              </p>
-            </caption>
-            <thead className='whitespace-nowraptext-xs uppercase text-sm md:text-md bg-gray-100 dark:bg-gray-800 dark:text-white'>
-              <tr className='h-8 md:h-12'>
-                <th className='hidden w-4 p-4 rounded-l-lg lg:table-cell'>
-                  <div className='flex items-center'>
-                    <input
-                      id='checkbox-table-search-1'
-                      type='checkbox'
-                      className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-                    />
-                    <label
-                      htmlFor='checkbox-table-search-1'
-                      className='sr-only'
-                    >
-                      checkbox
-                    </label>
-                  </div>
-                </th>
-                <th className='rounded-l-lg md:rounded-none hidden sm:table-cell'>Date</th>
-                <th className='hidden md:table-cell'>League</th>
-                <th className='rounded-l-lg sm:rounded-none'>Match</th>
-                <th className='hidden lg:table-cell'>Côte</th>
-                <th className='rounded-r-lg'>Indice</th>
-              </tr>
-            </thead>
-            <tbody>
-              {props.fixtures.map((fixture) => (
-                <InLineFixture fixture={fixture} />
-              ))}
-            </tbody>
-          </table>
-        </main>
-      </div>
-    </Layout>
+    <div className='page mx-4 flex justify-center'>
+      <main className='w-full'>
+        <table className='w-full'>
+          <caption className='mb-4 rounded-lg border dark:border-0 p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800'>
+            Our Filters
+            <p className='mt-1 text-sm font-normal text-gray-500 dark:text-gray-400'>
+              Here are the filters we use to find the best bets.
+            </p>
+          </caption>
+          <thead className='whitespace-nowraptext-xs uppercase text-sm md:text-md bg-gray-100 dark:bg-gray-800 dark:text-white'>
+            <tr className='h-8 md:h-12'>
+              <th className='hidden w-4 p-4 rounded-l-lg lg:table-cell'>
+                <div className='flex items-center'>
+                  <input
+                    id='checkbox-table-search-1'
+                    type='checkbox'
+                    className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                  />
+                  <label htmlFor='checkbox-table-search-1' className='sr-only'>
+                    checkbox
+                  </label>
+                </div>
+              </th>
+              <th className='rounded-l-lg md:rounded-none hidden sm:table-cell'>
+                Date
+              </th>
+              <th className='hidden md:table-cell'>League</th>
+              <th className='rounded-l-lg sm:rounded-none'>Match</th>
+              <th className='hidden lg:table-cell'>Côte</th>
+              <th className='rounded-r-lg'>Indice</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props?.fixtures?.map((fixture) => (
+              <InLineFixture fixture={fixture} />
+            ))}
+          </tbody>
+        </table>
+      </main>
+    </div>
   );
 };
 

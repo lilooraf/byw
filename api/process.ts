@@ -1,5 +1,5 @@
-import { PrismaClient, Prisma, Fixture } from '@prisma/client';
-import { processFixture } from '../bywAlgo/process';
+import { PrismaClient } from '@prisma/client';
+import { bywAlgoFixture } from '../bywAlgo/process';
 
 const prisma = new PrismaClient();
 
@@ -19,8 +19,8 @@ export async function bywAlgo(number: number) {
   });
 
   for (const fixture of fixtures) {
-    await processFixture(fixture).catch((e) => {
-      console.log(e);
+    await bywAlgoFixture(fixture).catch((err) => {
+      console.log(err);
     });
     console.log('Byw Algo Finished');
   }

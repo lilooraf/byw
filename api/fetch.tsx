@@ -2,16 +2,10 @@ import axios from "axios";
 import rateLimit from "axios-rate-limit";
 import { Fixture, LeagueData, Standing, Venue, Country } from "./types";
 
-// let http = rateLimit(axios.create(), {
-//   maxRequests: 9999,
-//   perMilliseconds: 600000,
-//   maxRPS: 3,
-// });
 let http = rateLimit(axios.create(), {
   maxRequests: 5,
   maxRPS: 5,
 });
-
 
 export const fetchNextFixtures = async (number: number): Promise<Fixture[]> => {
   const options = {

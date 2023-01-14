@@ -6,7 +6,11 @@ import Image from 'next/image';
 import useOutsideCloser from '../hooks/useOutsideCloser';
 import { useState } from 'react';
 
-const Header: React.FC = () => {
+type Props = {
+  loading?: boolean;
+};
+
+const Header: React.FC<Props> = (props) => {
   const menuUserRef = useRef(null);
   const menuRef = useRef(null);
   const router = useRouter();
@@ -27,9 +31,7 @@ const Header: React.FC = () => {
 
   const closeMenuUser = () => {
     const element = document.getElementById('dropdownAvatarName');
-    // if (element) {
     element.style.display = 'none';
-    // }
   };
 
   const closeMenu = () => {
@@ -46,30 +48,6 @@ const Header: React.FC = () => {
   if (status === 'loading') {
     menu = (
       <div className='left'>
-        {/* <Link href='/'>
-          <a className='bold' data-active={isActive('/')}>
-            Feed
-          </a>
-        </Link> */}
-        <style jsx>{`
-          .bold {
-            font-weight: bold;
-          }
-
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
-
-          .left a[data-active='true'] {
-            color: gray;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-        `}</style>
       </div>
     );
     right = (
@@ -92,27 +70,6 @@ const Header: React.FC = () => {
             <a data-active={isActive('/signup')}>Log in</a>
           </Link>
         </div>
-        {/* <style jsx>{`
-          a {
-            text-decoration: none;
-            color: #000;
-            display: inline-block;
-          }
-
-          a + a {
-            margin-left: 1rem;
-          }
-
-          .right {
-            margin-left: auto;
-          }
-
-          .right a {
-            border: 1px solid black;
-            padding: 0.5rem 1rem;
-            border-radius: 3px;
-          }
-        `}</style> */}
       </div>
     );
   }
@@ -179,6 +136,7 @@ const Header: React.FC = () => {
               <a
                 href='#'
                 className='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+                data-active={isActive('/dashboard')}
               >
                 Dashboard
               </a>
@@ -187,6 +145,7 @@ const Header: React.FC = () => {
               <a
                 href='#'
                 className='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+                data-active={isActive('/settings')}
               >
                 Settings
               </a>
@@ -195,6 +154,7 @@ const Header: React.FC = () => {
               <a
                 href='#'
                 className='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'
+                data-active={isActive('/earnings')}
               >
                 Earnings
               </a>
@@ -204,6 +164,7 @@ const Header: React.FC = () => {
             <a
               href='#'
               className='block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+              data-active={isActive('/signout')}
             >
               Sign out
             </a>
@@ -221,7 +182,7 @@ const Header: React.FC = () => {
           alt='logo'
           width='64'
           height='40'
-          className='rounded-lg dark:invert-0 invert cursor-pointer'
+          className={`rounded-lg invert dark:invert-0 cursor-pointer ${props.loading ? 'animate-pulse' : ''}`}
         />
       </Link>
     </div>

@@ -9,7 +9,7 @@ export const H2H: React.FC<{
     let awayWins = 0;
     let draws = 0;
   
-    fixtures.forEach((fixture) => {
+    fixtures.forEach((fixture: Fixture) => {
       if (fixture.teamHomeId === homeId && fixture.teamAwayId === awayId) {
         if (fixture.winnerHome) homeWins++;
         else if (fixture.winnerAway) awayWins++;
