@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import useOutsideCloser from '../hooks/useOutsideCloser';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Props = {
   loading?: boolean;
@@ -19,6 +19,10 @@ const Header: React.FC<Props> = (props) => {
     router.pathname === pathname;
 
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    closeMenu();
+  }, [router.pathname])
 
   const openCloseMenuUser = () => {
     const element = document.getElementById('dropdownAvatarName');
