@@ -97,9 +97,9 @@ const Header: React.FC<Props> = (props) => {
             xmlns='http://www.w3.org/2000/svg'
           >
             <path
-              fill-rule='evenodd'
+              fillRule='evenodd'
               d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-              clip-rule='evenodd'
+              clipRule='evenodd'
             ></path>
           </svg>
         </button>
@@ -178,6 +178,7 @@ const Header: React.FC<Props> = (props) => {
   let logo = (
     <div className='absolute flex items-center top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
       <Link href='/'>
+        <>
         <Image
           src='/assets/icons/byw-logo.png'
           alt='logo'
@@ -187,6 +188,7 @@ const Header: React.FC<Props> = (props) => {
             props.loading ? 'animate-pulse' : ''
           }`}
         />
+        </>
       </Link>
     </div>
   );
