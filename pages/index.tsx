@@ -16,7 +16,7 @@ const Home = (props) => {
   if (typeof window !== 'undefined') {
     window.addEventListener('mousemove', (e) => {
       paralaxRef.current.forEach((element) => {
-        if (element.style) {
+        if (element?.style) {
           let moving_value = element.getAttribute('data-value');
           let x = (e.clientX * moving_value) / 300;
           let y = (e.clientY * moving_value) / 300;

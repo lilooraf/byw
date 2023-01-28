@@ -264,6 +264,7 @@ const Fixtures: React.FC<Props> = (props) => {
   if (!session) {
     return (
       <div>
+        <h1>Not signed in</h1>
       </div>
     );
   }
@@ -303,7 +304,7 @@ const Fixtures: React.FC<Props> = (props) => {
           </thead>
           <tbody>
             {props?.fixtures?.map((fixture) => (
-              <InLineFixture fixture={fixture} />
+              <InLineFixture fixture={fixture} key={fixture.id} />
             ))}
           </tbody>
         </table>
