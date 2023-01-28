@@ -69,7 +69,7 @@ const Home = (props) => {
 
           <div className='w-full flex justify-center'>
             <div className='relative w-full max-w-[1420px] h-full max-h-[900px] '>
-              <div className='h-screen max-h-[1200px] w-full flex justify-center items-center align-middle text-center'>
+              <div className='h-screen max-h-[1200px] w-full flex justify-center items-center align-middle text-center bg-black'>
                 <div className='z-10 mx-10 md:w-1/2'>
                   <div className='text-3xl font-bold inline text-transparent bg-clip-text bg-gradient-to-l from-white via-yellow-500 to-orange-600'>
                     How does it work?
@@ -129,7 +129,6 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-          <div className='h-48 bg-black w-full'></div>
         </div>
       </div>
     </div>
