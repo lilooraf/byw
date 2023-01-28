@@ -129,6 +129,7 @@ const Home = (props) => {
               </div>
             </div>
           </div>
+          <div className='h-48 bg-black w-full'></div>
         </div>
       </div>
     </div>
