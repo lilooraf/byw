@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "copy-db": "pg_dump postgres://postgres:postgres_docker@localhost:5439/postgres | psql postgres://lilooraf:MIiBLP6YJ4Dx@ep-polished-meadow-945802.eu-central-1.aws.neon.tech/byw"
+    "start": "next start"
   },
   "dependencies": {
     "@netlify/functions": "^1.4.0",
