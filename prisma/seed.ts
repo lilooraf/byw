@@ -52,21 +52,25 @@ const userData: Prisma.UserCreateInput[] = [
 
 async function main() {
   console.log(`Start seeding ...`);
-  await seedLeagues(5);
-  console.log(`Leagues Seeded`);
-  await seedFixtures();
-  console.log(`Fixtures Seeded.`);
-  await seedStandigns();
-  console.log(`Standings Seeded.`);
-  bywAlgo(100);
-  
+
+  seedLeagues(5).then(() => {
+    console.log(`Leagues Seeded`);
+    seedFixtures().then(() => {
+      console.log(`Fixtures Seeded.`);
+      seedStandigns().then(() => {
+        console.log(`Standings Seeded.`);
+        bywAlgo(100).then(() => {
+          console.log(`Seeding finished.`);
+        });
+      });
+    });
+  });
   // for (const u of userData) {
   //   const user = await prisma.user.create({
   //     data: u,
   //   });
   //   console.log(`Created user with id: ${user.id}`);
   // }
-  console.log(`Seeding finished.`);
 }
 
 main()
