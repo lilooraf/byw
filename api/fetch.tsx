@@ -1,4 +1,3 @@
-import { Bet, Bookmaker, Odd, prisma } from '@prisma/client';
 import axios from 'axios';
 import rateLimit from 'axios-rate-limit';
 import { Fixture, LeagueData, Standing, Venue, Country } from './types';
