@@ -1,6 +1,8 @@
 import { PrismaClient, Prisma } from '@prisma/client';
+import { fetchTodayBets, OddBetApi } from '../api/fetch';
 import { seedFixtures, seedLeagues, seedStandigns } from '../api/logic';
 import { bywAlgo } from '../api/process';
+import { storeOddBetApi } from '../api/store';
 
 const prisma = new PrismaClient();
 
@@ -53,18 +55,24 @@ const userData: Prisma.UserCreateInput[] = [
 async function main() {
   console.log(`Start seeding ...`);
 
-  seedLeagues(5).then(() => {
-    console.log(`Leagues Seeded`);
-    seedFixtures().then(() => {
-      console.log(`Fixtures Seeded.`);
-      seedStandigns().then(() => {
-        console.log(`Standings Seeded.`);
-        bywAlgo(100).then(() => {
-          console.log(`Seeding finished.`);
-        });
-      });
-    });
+  console.log(`Start seeding ...`);
+  await seedLeagues(5);
+  console.log(`Leagues Seeded`);
+  await seedFixtures();
+  console.log(`Fixtures Seeded.`);
+  await seedStandigns();
+  console.log(`Standings Seeded.`);
+  bywAlgo(100);
+
+  fetchTodayBets().then(async (oddBets: OddBetApi[]) => {
+    let i = 0;
+    for (const oddBet of oddBets as OddBetApi[]) {
+      console.log(`Seeding ${i++} of ${oddBets.length}...`);
+
+      await storeOddBetApi(oddBet);
+    }
   });
+
   // for (const u of userData) {
   //   const user = await prisma.user.create({
   //     data: u,

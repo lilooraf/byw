@@ -72,15 +72,23 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const fixtures = await prisma.fixture.findMany({
     where: {
-      date: {
-        gte: new Date(),
-      },
+      date: new Date(),
     },
     orderBy: {
       date: 'asc',
     },
     take: 10,
     include: {
+      Bets: {
+        where: {
+          Bookmaker: {
+            name: 'Bet365',
+          },
+        },
+        include: {
+          Odds: true,
+        },
+      },
       Byw: true,
       League: {
         include: {

@@ -32,7 +32,7 @@ export const seedFixtures = async () => {
   for (const league of leagues) {
     for (const season of league.Season) {
       // Block seasons before actual year-2
-      if (season.year < new Date().getFullYear() - 2) continue;
+      if (season.year < new Date().getFullYear() - 1) continue;
       await fetchFixturesByLeagueIdAndSeason(league.id, season.year).then(
         async (fixtures) => {
           for (const fixture of fixtures) {
