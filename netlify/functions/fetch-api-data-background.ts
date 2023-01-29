@@ -3,8 +3,6 @@ import { seedFixtures, seedLeagues, seedStandigns } from "../../api/logic";
 import { bywAlgo } from "../../api/process";
 
 const fetchApi: Handler = async (event: HandlerEvent, context: HandlerContext) => {
-    console.log("Received event:", event);
-    
     console.log(`Start fetching ...`);
     await seedLeagues(5);
     console.log(`Leagues Seeded`);
@@ -20,6 +18,6 @@ const fetchApi: Handler = async (event: HandlerEvent, context: HandlerContext) =
     };
 };
 
-const handler = schedule("@daily", fetchApi)
+const handler = schedule("@hourly", fetchApi)
 
 export { handler };
