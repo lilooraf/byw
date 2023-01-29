@@ -62,13 +62,13 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
       <td className='px-2 hidden lg:table-cell'>
         <div className='flex justify-center align-middle text-center text-xs font-mono'>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600 border-r-2 rounded-l-md border-2 font-bold'>
-            1.12
+            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Home')?.value || '-'}
           </div>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600'>
-            0.21
+            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Draw')?.value || '-'}
           </div>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600 border-l-2 rounded-r-md'>
-            0.47
+            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Away')?.value || '-'}
           </div>
         </div>
       </td>

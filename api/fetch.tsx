@@ -340,7 +340,7 @@ export const fetchVenuesByCountryName = async (
     });
 };
 
-export const fetchTodayBets = async (): Promise<OddBetApi[]> => {
+export const fetchBets = async (date: Date): Promise<OddBetApi[]> => {
   let bets: OddBetApi[] = [];
   let pagination = 1;
   let total = 2;
@@ -349,7 +349,7 @@ export const fetchTodayBets = async (): Promise<OddBetApi[]> => {
     method: 'GET',
     url: process.env.API_URL + '/odds',
     params: {
-      date: new Date().toISOString().substr(0, 10),
+      date: date.toISOString().substr(0, 10),
       page: pagination,
     },
     headers: {
@@ -358,13 +358,11 @@ export const fetchTodayBets = async (): Promise<OddBetApi[]> => {
     },
   };
 
-  while (pagination < total) {
+  while (pagination <= total) {
     options.params.page = pagination;
     await http
       .request(options)
       .then(function (response) {
-        console.log(`Page ${pagination} of ${total} fetched`);
-        
         total = response.data.paging.total;
         bets = bets.concat(response.data.response);
       })

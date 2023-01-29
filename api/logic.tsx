@@ -1,11 +1,20 @@
 import { Country, League, Season } from '@prisma/client';
+import prisma from '../lib/prisma';
 import {
   fetchLeagues,
   fetchFixturesByLeagueIdAndSeason,
   fetchStandingsByLeagueId,
+  fetchBets,
+  OddBetApi,
 } from './fetch';
 import { getFromDBLeagues } from './getFromDB';
-import { storeFixture, storeLeague, storeStandings } from './store';
+import { bywAlgo } from './process';
+import {
+  storeFixture,
+  storeLeague,
+  storeOddBetApi,
+  storeStandings,
+} from './store';
 import { LeagueData } from './types';
 
 export const seedLeagues = async (leagueNB?: number) => {
@@ -19,6 +28,7 @@ export const seedLeagues = async (leagueNB?: number) => {
     i++;
     await storeLeague(league);
   }
+  console.log(`Leagues Seeded`);
 };
 
 export const seedFixtures = async () => {
@@ -32,11 +42,17 @@ export const seedFixtures = async () => {
   for (const league of leagues) {
     for (const season of league.Season) {
       // Block seasons before actual year-2
-      if (season.year < new Date().getFullYear() - 1) continue;
+      if (season.year < new Date().getFullYear() - 2) {
+        console.log(`Skipping ${league.name} ${season.year}`);
+        continue;
+      }
       await fetchFixturesByLeagueIdAndSeason(league.id, season.year).then(
         async (fixtures) => {
+          let i = 0;
           for (const fixture of fixtures) {
-            await storeFixture(fixture);
+            await storeFixture(fixture).then(() => {
+              console.log(`Fixture stored: ${i++}/${fixtures.length}`);
+            });
           }
           console.log(
             'fixtures stored for league ' +
@@ -48,6 +64,7 @@ export const seedFixtures = async () => {
       );
     }
   }
+  console.log(`Fixtures Seeded.`);
 };
 
 export const seedStandigns = async () => {
@@ -75,4 +92,50 @@ export const seedStandigns = async () => {
       );
     }
   }
+  console.log(`Standings Seeded.`);
+};
+
+export const seedOddBets = async (daysToSeed: number) => {
+  let date = new Date();
+
+  console.log(`Deleting Bets...`);
+
+  await prisma.$queryRawUnsafe(`Truncate "Bet" restart identity cascade;`);
+
+  console.log(`Bets Deleted`);
+
+  for (let i = 1; i <= daysToSeed; i++) {
+    console.log(
+      `Seeding ${i} of ${daysToSeed} (${date.toLocaleDateString()})...`
+    );
+    await fetchBets(date).then(async (oddBets: OddBetApi[]) => {
+      for (const oddBet of oddBets as OddBetApi[]) {
+        await prisma.fixture
+          .findUnique({
+            where: {
+              id: oddBet.fixture.id,
+            },
+          })
+          .then(async (fixture) => {
+            if (fixture) {
+              await storeOddBetApi(oddBet);
+            }
+          });
+      }
+    });
+    date.setDate(date.getDate() + 1);
+  }
+  console.log(`Bets Seeded.`);
+};
+
+export const seedAll = async () => {
+  await seedLeagues(10).then(async () => {
+    await seedFixtures().then(async () => {
+      await seedStandigns().then(async () => {
+        await bywAlgo(100).then(async () => {
+          await seedOddBets(3);
+        });
+      });
+    });
+  });
 };

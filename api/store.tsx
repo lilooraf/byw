@@ -38,7 +38,7 @@ export const storeStandings = async (standingsData: Standing[]) => {
               }
             })
             .catch((error) => {
-              console.error('storeStandings - ', error);
+              // console.log('storeStandings - ', error);
             });
 
           if (standing.team.id) {
@@ -101,7 +101,7 @@ export const storeStandings = async (standingsData: Standing[]) => {
                 },
               })
               .catch((err) => {
-                console.log('storeStandings - connet to Team by id', err);
+                // console.log('storeStandings - connet to Team by id', err);
                 error = true;
               });
           } else {
@@ -377,9 +377,9 @@ export const storeLeague = async (league: LeagueData) => {
     console.error('storeLeague', err);
   });
 
-  league.seasons.forEach(async (season) => {
+  for (const season of league.seasons) {
     await storeSeason(season, league.league.id);
-  });
+  }
 };
 
 export const storeSeason = async (season: Season, leagueID: number) => {
@@ -406,7 +406,7 @@ export const storeSeason = async (season: Season, leagueID: number) => {
       },
     })
     .catch((err) => {
-      console.log(err);
+      console.error('storeSeason', err);
     });
 };
 
