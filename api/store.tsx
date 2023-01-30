@@ -499,7 +499,6 @@ export const storeBet = async (bet: BetApi, bookmakerId: number, fixtureId: numb
       type: odd.value.toString(),
     });
   });
-  
   await prisma.bet.create({
     data: {
       name: bet.name,
