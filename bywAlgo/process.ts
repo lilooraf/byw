@@ -87,9 +87,19 @@ export const bywAlgoFixture = async (fixture: Fixture) => {
   let homeFixtures: FixtureCustom[] = [];
   let awayFixtures: FixtureCustom[] = [];
 
+  // TODO: get fixtures before fixture date
+
   try {
-    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 100, ['FT', 'AET', 'PEN']);
-    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 100, ['FT', 'AET', 'PEN']);
+    homeFixtures = await getLastFixturesByTeamId(teamHomeId, 100, [
+      'FT',
+      'AET',
+      'PEN',
+    ]);
+    awayFixtures = await getLastFixturesByTeamId(teamAwayId, 100, [
+      'FT',
+      'AET',
+      'PEN',
+    ]);
   } catch (e) {
     throw e;
   }
@@ -132,23 +142,28 @@ export const bywAlgoFixture = async (fixture: Fixture) => {
 
   let result = (domextrank + domextperf + rank + perf) * (1 / 3 + 1);
 
-  // Head To Head
+  // TODO: Head To Head
 
-  // To do
+  if (!result) console.log('result:', result);
+  if (!rank) console.log('rank:', rank);
+  if (!perf) console.log('perf: ', perf);
+  if (!domextrank) console.log('domextrank:', domextrank);
+  if (!domextperf) console.log('domextperf:', domextperf);
 
-  if (!result || !rank || !perf || !domextrank || !domextperf)
+  if (!result) {
     throw (
-      'Error in BywAlgo bywAlgoFixture result null ' +
+      'Error in BywAlgo bywAlgoFixture fixtureId:' +
       fixture.id +
-      ' homeFixtures: ' +
+      ' homeFixturesLength: ' +
       homeFixtures.length +
-      ' awayFixtures: ' +
+      ' awayFixturesLength: ' +
       awayFixtures.length +
-      ' homeDomFixtures: ' +
+      ' homeDomFixturesLength: ' +
       homeDomFixtures.length +
-      ' awayExtFixtures: ' +
+      ' awayExtFixturesLength: ' +
       awayExtFixtures.length
     );
+  }
 
   const byw: BywCustom = {
     indice: result,
@@ -183,10 +198,16 @@ const diffInRangeOfWeight = (
 ): number => {
   let r = r1 / r2 - 1;
 
-  if (r > 1) return weight;
-  if (r < -0.5) return 0;
+  if (r > 1) {
+    return weight;
+  }
+  if (r < -0.5) {
+    return 0;
+  }
 
-  if (r < 0 && r >= -0.5) r = r * 2;
+  if (r < 0 && r >= -0.5) {
+    r = r * 2;
+  }
 
   r = r * (weight / 2) + weight / 2;
 
