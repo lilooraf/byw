@@ -1,14 +1,15 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-// import { fetchBets, OddBetApi } from '../api/fetch';
-// import {
-//   seedFixtures,
-//   seedLeagues,
-//   seedOddBets,
-//   seedStandigns,
-//   seedAll,
-// } from '../api/logic';
-// import { bywAlgo } from '../api/process';
-// import { storeOddBetApi } from '../api/store';
+import { fetchBets, OddBetApi } from '../api/fetch';
+import {
+  seedFixtures,
+  seedLeagues,
+  seedOddBets,
+  seedStandigns,
+  seedAll,
+} from '../api/logic';
+import { bywAlgo } from '../api/process';
+import { storeOddBetApi } from '../api/store';
+import { bywAlgoFixture } from '../bywAlgo/process';
 
 const prisma = new PrismaClient();
 
@@ -61,7 +62,25 @@ const userData: Prisma.UserCreateInput[] = [
 async function main() {
   console.log(`Start seeding ...`);
 
-  // await seedAll();
+  await seedAll();
+
+  
+  // seedOddBets(3);
+  // seedStandigns();
+  // bywAlgo(100);
+  // prisma.fixture.findFirst({
+  //   where: {
+  //     id: 924381,
+  //     // id: 878123,
+  //   },
+  // }).then((fixture) => {
+  //   bywAlgoFixture(fixture).catch((err) => {
+  //     console.log(err);
+  //   });
+  // });
+
+
+
 
   console.log(`Seeding finished.`);
 
