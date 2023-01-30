@@ -339,37 +339,37 @@ export const fetchVenuesByCountryName = async (
     });
 };
 
-export const fetchBets = async (date: Date): Promise<OddBetApi[]> => {
-  let bets: OddBetApi[] = [];
-  let pagination = 1;
-  let total = 2;
+// export const fetchBets = async (date: Date): Promise<OddBetApi[]> => {
+//   let bets: OddBetApi[] = [];
+//   let pagination = 1;
+//   let total = 2;
 
-  const options = {
-    method: 'GET',
-    url: process.env.API_URL + '/odds',
-    params: {
-      date: date.toISOString().substr(0, 10),
-      page: pagination,
-    },
-    headers: {
-      'X-RapidAPI-Key': process.env.API_KEY,
-      'X-RapidAPI-Host': process.env.API_HOST,
-    },
-  };
+//   const options = {
+//     method: 'GET',
+//     url: process.env.API_URL + '/odds',
+//     params: {
+//       date: date.toISOString().substr(0, 10),
+//       page: pagination,
+//     },
+//     headers: {
+//       'X-RapidAPI-Key': process.env.API_KEY,
+//       'X-RapidAPI-Host': process.env.API_HOST,
+//     },
+//   };
 
-  while (pagination <= total) {
-    options.params.page = pagination;
-    await http
-      .request(options)
-      .then(function (response) {
-        total = response.data.paging.total;
-        bets = bets.concat(response.data.response);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-    pagination++;
-  }
+//   while (pagination <= total) {
+//     options.params.page = pagination;
+//     await http
+//       .request(options)
+//       .then(function (response) {
+//         total = response.data.paging.total;
+//         bets = bets.concat(response.data.response);
+//       })
+//       .catch(function (error) {
+//         console.error(error);
+//       });
+//     pagination++;
+//   }
 
-  return bets;
-};
+//   return bets;
+// };

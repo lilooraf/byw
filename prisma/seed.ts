@@ -1,14 +1,14 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { fetchBets, OddBetApi } from '../api/fetch';
-import {
-  seedFixtures,
-  seedLeagues,
-  seedOddBets,
-  seedStandigns,
-  seedAll,
-} from '../api/logic';
-import { bywAlgo } from '../api/process';
-import { storeOddBetApi } from '../api/store';
+// import { fetchBets, OddBetApi } from '../api/fetch';
+// import {
+//   seedFixtures,
+//   seedLeagues,
+//   seedOddBets,
+//   seedStandigns,
+//   seedAll,
+// } from '../api/logic';
+// import { bywAlgo } from '../api/process';
+// import { storeOddBetApi } from '../api/store';
 
 const prisma = new PrismaClient();
 

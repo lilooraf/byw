@@ -4,15 +4,15 @@ import {
   fetchLeagues,
   fetchFixturesByLeagueIdAndSeason,
   fetchStandingsByLeagueId,
-  fetchBets,
-  OddBetApi,
+  // fetchBets,
+  // OddBetApi,
 } from './fetch';
 import { getFromDBLeagues } from './getFromDB';
 import { bywAlgo } from './process';
 import {
   storeFixture,
   storeLeague,
-  storeOddBetApi,
+  // storeOddBetApi,
   storeStandings,
 } from './store';
 import { LeagueData } from './types';
@@ -95,45 +95,45 @@ export const seedStandigns = async () => {
   console.log(`Standings Seeded.`);
 };
 
-export const seedOddBets = async (daysToSeed: number) => {
-  let date = new Date();
+// export const seedOddBets = async (daysToSeed: number) => {
+//   let date = new Date();
 
-  console.log(`Deleting Bets...`);
+//   console.log(`Deleting Bets...`);
 
-  await prisma.$queryRawUnsafe(`Truncate "Bet" restart identity cascade;`);
+//   await prisma.$queryRawUnsafe(`Truncate "Bet" restart identity cascade;`);
 
-  console.log(`Bets Deleted`);
+//   console.log(`Bets Deleted`);
 
-  for (let i = 1; i <= daysToSeed; i++) {
-    console.log(
-      `Seeding ${i} of ${daysToSeed} (${date.toLocaleDateString()})...`
-    );
-    await fetchBets(date).then(async (oddBets: OddBetApi[]) => {
-      for (const oddBet of oddBets as OddBetApi[]) {
-        await prisma.fixture
-          .findUnique({
-            where: {
-              id: oddBet.fixture.id,
-            },
-          })
-          .then(async (fixture) => {
-            if (fixture) {
-              await storeOddBetApi(oddBet);
-            }
-          });
-      }
-    });
-    date.setDate(date.getDate() + 1);
-  }
-  console.log(`Bets Seeded.`);
-};
+//   for (let i = 1; i <= daysToSeed; i++) {
+//     console.log(
+//       `Seeding ${i} of ${daysToSeed} (${date.toLocaleDateString()})...`
+//     );
+//     await fetchBets(date).then(async (oddBets: OddBetApi[]) => {
+//       for (const oddBet of oddBets as OddBetApi[]) {
+//         await prisma.fixture
+//           .findUnique({
+//             where: {
+//               id: oddBet.fixture.id,
+//             },
+//           })
+//           .then(async (fixture) => {
+//             if (fixture) {
+//               await storeOddBetApi(oddBet);
+//             }
+//           });
+//       }
+//     });
+//     date.setDate(date.getDate() + 1);
+//   }
+//   console.log(`Bets Seeded.`);
+// };
 
 export const seedAll = async () => {
   await seedLeagues(10).then(async () => {
     await seedFixtures().then(async () => {
       await seedStandigns().then(async () => {
         await bywAlgo(100).then(async () => {
-          await seedOddBets(3);
+          // await seedOddBets(3);
         });
       });
     });

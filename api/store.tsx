@@ -473,66 +473,66 @@ const finalScore = (score: Prisma.JsonValue, home: boolean): number => {
   return home ? homePoint : awayPoint;
 };
 
-export const storeOddBetApi = async (oddBetApi: OddBetApi) => {
+// export const storeOddBetApi = async (oddBetApi: OddBetApi) => {
 
-  for (const bookmaker of oddBetApi.bookmakers) {
-    await storeBookmaker(bookmaker);
-    console.log(`fixture: ${oddBetApi.fixture.id} - bookmaker ${bookmaker.name} stored`);
+//   for (const bookmaker of oddBetApi.bookmakers) {
+//     await storeBookmaker(bookmaker);
+//     console.log(`fixture: ${oddBetApi.fixture.id} - bookmaker ${bookmaker.name} stored`);
     
-    await storeBets(bookmaker.bets, bookmaker.id, oddBetApi.fixture.id);
-  };
-};
+//     await storeBets(bookmaker.bets, bookmaker.id, oddBetApi.fixture.id);
+//   };
+// };
 
-export const storeBets = async (bets: BetApi[], bookmakerId: number, fixtureId: number) => {
-  bets.forEach(async (bet) => {
-    await storeBet(bet, bookmakerId, fixtureId);
-  });
-};
+// export const storeBets = async (bets: BetApi[], bookmakerId: number, fixtureId: number) => {
+//   bets.forEach(async (bet) => {
+//     await storeBet(bet, bookmakerId, fixtureId);
+//   });
+// };
 
-export const storeBet = async (bet: BetApi, bookmakerId: number, fixtureId: number) => {
+// export const storeBet = async (bet: BetApi, bookmakerId: number, fixtureId: number) => {
   
-  let odd_ = [];
+//   let odd_ = [];
 
-  bet.values.forEach((odd) => {
-    odd_.push({
-      value: odd.odd,
-      type: odd.value.toString(),
-    });
-  });
-  await prisma.bet.create({
-    data: {
-      name: bet.name,
-      Bookmaker: {
-        connect: {
-          id: bookmakerId,
-        },
-      },
-      Odds: {
-        createMany: {
-          data: odd_,
-        },
-      },
-      Fixture: {
-        connect: {
-          id: fixtureId,
-        },
-      },
-    },
-  });
-};
+//   bet.values.forEach((odd) => {
+//     odd_.push({
+//       value: odd.odd,
+//       type: odd.value.toString(),
+//     });
+//   });
+//   await prisma.bet.create({
+//     data: {
+//       name: bet.name,
+//       Bookmaker: {
+//         connect: {
+//           id: bookmakerId,
+//         },
+//       },
+//       Odds: {
+//         createMany: {
+//           data: odd_,
+//         },
+//       },
+//       Fixture: {
+//         connect: {
+//           id: fixtureId,
+//         },
+//       },
+//     },
+//   });
+// };
 
-export const storeBookmaker = async (bookmaker: BookmakerApi) => {
-  await prisma.bookmaker.upsert({
-    where: {
-      id: bookmaker.id,
-    },
-    create: {
-      id: bookmaker.id,
-      name: bookmaker.name,
-    },
-    update: {
-      id: bookmaker.id,
-      name: bookmaker.name,
-    },
-  });
-};
+// export const storeBookmaker = async (bookmaker: BookmakerApi) => {
+//   await prisma.bookmaker.upsert({
+//     where: {
+//       id: bookmaker.id,
+//     },
+//     create: {
+//       id: bookmaker.id,
+//       name: bookmaker.name,
+//     },
+//     update: {
+//       id: bookmaker.id,
+//       name: bookmaker.name,
+//     },
+//   });
+// };
