@@ -101,6 +101,7 @@ export const seedOddBets = async (daysToSeed: number) => {
   console.log(`Deleting Bets...`);
 
   await prisma.$queryRawUnsafe(`Truncate "Bet" restart identity cascade;`);
+  await prisma.$queryRawUnsafe(`Truncate "Odd" restart identity cascade;`);
 
   console.log(`Bets Deleted`);
 
