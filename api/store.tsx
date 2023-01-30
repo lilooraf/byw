@@ -9,10 +9,10 @@ export const storeStandings = async (standingsData: Standing[]) => {
   if (!standingsData) return;
   let error = false;
 
-  standingsData.forEach((data) => {
-    getFromDBLeagueById(data.league.id).then((league: LeagueData) => {
-      data.league.standings.forEach((standingsData: StandingData[]) => {
-        standingsData.forEach(async (standing: StandingData) => {
+  for (const data of standingsData) {
+    getFromDBLeagueById(data.league.id).then(async (league: LeagueData) => {
+      for (const standingsData of data.league.standings) {
+        for (const standing of standingsData) {
           await prisma.standing
             .findFirstOrThrow({
               where: {
@@ -38,7 +38,7 @@ export const storeStandings = async (standingsData: Standing[]) => {
               }
             })
             .catch((error) => {
-              // console.log('storeStandings - ', error);
+              console.log('deleteOldStanding - ', error);
             });
 
           if (standing.team.id) {
@@ -101,7 +101,7 @@ export const storeStandings = async (standingsData: Standing[]) => {
                 },
               })
               .catch((err) => {
-                // console.log('storeStandings - connet to Team by id', err);
+                console.log('storeStandings - connet to Team by id', err);
                 error = true;
               });
           } else {
@@ -184,17 +184,17 @@ export const storeStandings = async (standingsData: Standing[]) => {
               .catch(() => {
                 if (error) {
                   console.error(
-                    'Team not found ',
+                    'Team not found to connect to standing',
                     standing.team.name,
                     standing.team.id
                   );
                 }
               });
           }
-        });
-      });
+        }
+      }
     });
-  });
+  }
 };
 
 export const storeFixture = async (fixture: Fixture) => {
