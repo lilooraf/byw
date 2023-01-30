@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
 }
 
 model Team {
@@ -100,7 +100,7 @@ model Fixture {
   TeamAway   Team?    @relation(onDelete: Cascade, fields: [teamAwayId], references: [id], name: "away")
   teamAwayId Int?
   Teams      Team[]   @relation(name: "FixtureTeams")
-  status_     String
+  status_    String
   winnerHome Boolean?
   winnerAway Boolean?
   homeScore  Int
@@ -109,6 +109,31 @@ model Fixture {
   seasonYear Int?
   Season     Season?  @relation(onDelete: Cascade, fields: [seasonYear], references: [year])
   Byw        Byw?
+  Bets       Bet[]    @relation(name: "FixtureBets")
+}
+
+model Bookmaker {
+  id   Int    @id @unique
+  name String
+  Bet  Bet[]  @relation(name: "BookmakerBets")
+}
+
+model Bet {
+  id          Int        @id @default(autoincrement())
+  name        String
+  fixtureId   Int?
+  Fixture     Fixture?   @relation(onDelete: Cascade, fields: [fixtureId], references: [id], name: "FixtureBets")
+  bookmakerId Int?
+  Bookmaker   Bookmaker? @relation(onDelete: Cascade, fields: [bookmakerId], references: [id], name: "BookmakerBets")
+  Odds        Odd[]      @relation(name: "BetOdds")
+}
+
+model Odd {
+  id          Int         @id @default(autoincrement())
+  type        String
+  value       String
+  betId       Int?
+  Bet         Bet?       @relation(onDelete: Cascade, fields: [betId], references: [id], name: "BetOdds")
 }
 
 model Post {

@@ -22,6 +22,6 @@ export async function bywAlgo(number: number) {
     await bywAlgoFixture(fixture).catch((err) => {
       console.log(err);
     });
-    console.log('Byw Algo Finished');
   }
+  console.log(`Byw Algo Finished`);
 }

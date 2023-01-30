@@ -12,6 +12,9 @@ import {
   Venue,
   Standing,
   Byw,
+  Bookmaker,
+  Bet,
+  Odd,
 } from '@prisma/client';
 
 export type FixtureProps = {
@@ -30,6 +33,12 @@ export type FixtureProps = {
   League: League & {
     Country: Country;
   };
+  Bets: Array<
+    Bet & {
+      Odds: Odd[];
+      Bookmaker: Bookmaker;
+    }
+  >;
 } & {
   TeamAway: Team & {
     Standing: Standing;
@@ -58,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   res.setHeader(
     'Cache-Control',
     'public, s-maxage=10, stale-while-revalidate=59'
-  )
+  );
 
   const session = await getSession({ req });
   if (!session) {
@@ -72,15 +81,37 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   const fixtures = await prisma.fixture.findMany({
     where: {
+      // get: new Date(),
       date: {
-        gte: new Date(),
+        gt: new Date(),
+      },
+      AND: {
+        Bets: {
+          some: {
+            Bookmaker: {
+              name: 'Bet365',
+            },
+            name: 'Match Winner',
+          },
+        },
       },
     },
     orderBy: {
       date: 'asc',
     },
-    take: 10,
+    take: 40,
     include: {
+      Bets: {
+        where: {
+          Bookmaker: {
+            name: 'Bet365',
+          },
+          name: 'Match Winner',
+        },
+        include: {
+          Odds: true,
+        },
+      },
       Byw: true,
       League: {
         include: {
@@ -248,7 +279,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       Venue: true,
     },
   });
-  
+
   return {
     props: { fixtures: fixtures },
   };
@@ -270,8 +301,10 @@ const Fixtures: React.FC<Props> = (props) => {
   }
 
   const changeAllCheckboxes = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[id=checkbox-fixture]');
-    
+    const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+      'input[id=checkbox-fixture]'
+    );
+
     checkboxes.forEach((checkbox: HTMLInputElement) => {
       checkbox.checked = e.target.checked;
     });

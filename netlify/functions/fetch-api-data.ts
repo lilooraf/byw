@@ -4,28 +4,14 @@ import {
   HandlerContext,
   schedule,
 } from '@netlify/functions';
-import { seedFixtures, seedLeagues, seedStandigns } from '../../api/logic';
+import { seedAll, seedFixtures, seedLeagues, seedStandigns } from '../../api/logic';
 import { bywAlgo } from '../../api/process';
 
 const fetchApi: Handler = async (
   event: HandlerEvent,
   context: HandlerContext
 ) => {
-  console.log(`Start seeding ...`);
-
-  seedLeagues(5).then(() => {
-    console.log(`Leagues Seeded`);
-    seedFixtures().then(() => {
-      console.log(`Fixtures Seeded.`);
-      seedStandigns().then(() => {
-        console.log(`Standings Seeded.`);
-        bywAlgo(100).then(() => {
-          console.log(`Seeding finished.`);
-        });
-      });
-    });
-  });
-
+  // seedAll();
   return {
     statusCode: 200,
   };
