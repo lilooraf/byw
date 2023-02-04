@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import InLineFixture from '../../components/InLineFixture';
 import { useSession, getSession } from 'next-auth/react';
@@ -16,6 +16,7 @@ import {
   Bet,
   Odd,
 } from '@prisma/client';
+import useOutsideCloser from '../../hooks/useOutsideCloser';
 
 export type FixtureProps = {
   id: number;
@@ -85,16 +86,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       date: {
         gt: new Date(),
       },
-      AND: {
-        Bets: {
-          some: {
-            Bookmaker: {
-              name: 'Bet365',
-            },
-            name: 'Match Winner',
-          },
-        },
-      },
+      // AND: {
+      //   Bets: {
+      //     some: {
+      //       Bookmaker: {
+      //         name: 'Bet365',
+      //       },
+      //       name: 'Match Winner',
+      //     },
+      //   },
+      // },
     },
     orderBy: {
       date: 'asc',
@@ -103,13 +104,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     include: {
       Bets: {
         where: {
-          Bookmaker: {
-            name: 'Bet365',
-          },
           name: 'Match Winner',
         },
         include: {
           Odds: true,
+          Bookmaker: {
+            select: {
+              name: true,
+            },
+          }
         },
       },
       Byw: true,
@@ -136,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 lte: new Date(),
               },
               status_: {
-                not: undefined,
+                in: ['FT', 'AET', 'PEN'],
               },
             },
             orderBy: {
@@ -159,7 +162,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 lte: new Date(),
               },
               status_: {
-                not: undefined,
+                in: ['FT', 'AET', 'PEN'],
               },
             },
             orderBy: {
@@ -182,7 +185,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 lte: new Date(),
               },
               status_: {
-                not: undefined,
+                in: ['FT', 'AET', 'PEN'],
               },
             },
             orderBy: {
@@ -238,7 +241,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 lte: new Date(),
               },
               status_: {
-                not: undefined,
+                in: ['FT', 'AET', 'PEN'],
               },
             },
             orderBy: {
@@ -261,7 +264,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
                 lte: new Date(),
               },
               status_: {
-                not: undefined,
+                in: ['FT', 'AET', 'PEN'],
               },
             },
             orderBy: {
@@ -280,17 +283,29 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
   });
 
+  const bookmmakers: Bookmaker[] = await prisma.bookmaker.findMany();
+
   return {
-    props: { fixtures: fixtures },
+    props: { fixtures: fixtures, bookmmakers: bookmmakers },
   };
 };
 
 type Props = {
   fixtures: FixtureProps[];
+  bookmmakers: Bookmaker[];
 };
 
 const Fixtures: React.FC<Props> = (props) => {
   const { data: session } = useSession();
+  const [bookmakerSelected, setBookmakerSelected] = useState(props.bookmmakers[0].name);
+  const [bookmakersListOpen, setBookmakersListOpen] = useState(false);
+  const ref = useRef(null);
+  useOutsideCloser(ref, () => setBookmakersListOpen(false));
+
+  const updateBookmaker = (bookmaker: string) => {
+    setBookmakerSelected(bookmaker);
+    setBookmakersListOpen(false);
+  };
 
   if (!session) {
     return (
@@ -342,13 +357,42 @@ const Fixtures: React.FC<Props> = (props) => {
               </th>
               <th className='hidden md:table-cell'>League</th>
               <th className='rounded-l-lg sm:rounded-none'>Match</th>
-              <th className='hidden lg:table-cell'>Odd</th>
+              <th className='hidden lg:table-cell'>
+                <div className='flex w-full justify-center' ref={ref}>
+                  <button onClick={() => {
+                    setBookmakersListOpen(!bookmakersListOpen);
+                  }} id="dropdownRadioButton" data-dropdown-toggle="dropdownDefaultRadio" className=" relative hover:bg-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:hover:bg-blue-700" type="button">
+                    Bookmaker: {bookmakerSelected}
+                    <svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+
+                  <div id="dropdownDefaultRadio" hidden={!bookmakersListOpen} className="overflow-auto h-40 z-10 absolute w-48 mt-12 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                      <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-200 " aria-labelledby="dropdownRadioButton">
+                        {
+                          props?.bookmmakers?.map((bookmaker) => (
+                            <li className='' key={bookmaker.id} onClick={
+                              () => {
+                                updateBookmaker(bookmaker.name);
+                                setBookmakersListOpen(false);
+                              }
+                            }>
+                              <label className="flex items-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800">
+                                <input type="radio" name="bookmaker" checked={bookmakerSelected == bookmaker.name} value={bookmaker.id} className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                <span className="font-medium">{bookmaker.name}</span>
+                              </label>
+                            </li>
+                          ))
+                      }
+                      </ul>
+                  </div>
+                </div>
+              </th>
               <th className='rounded-r-lg'>Indice</th>
             </tr>
           </thead>
           <tbody>
-            {props?.fixtures?.map((fixture) => (
-              <InLineFixture fixture={fixture} key={fixture.id} />
+            {props.fixtures?.map((fixture) => (
+              <InLineFixture fixture={fixture} key={fixture.id} bookmakerSelected={bookmakerSelected} />
             ))}
           </tbody>
         </table>
