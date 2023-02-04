@@ -15,6 +15,7 @@ import {
   Bookmaker,
   Bet,
   Odd,
+  Prediction,
 } from '@prisma/client';
 import useOutsideCloser from '../../hooks/useOutsideCloser';
 
@@ -31,6 +32,7 @@ export type FixtureProps = {
   winnerAway: boolean | null;
   score: Prisma.JsonValue | null;
   Byw: Byw;
+  Prediction: Prediction;
   League: League & {
     Country: Country;
   };
@@ -102,6 +104,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     },
     take: 40,
     include: {
+      Prediction: true,
       Bets: {
         where: {
           name: 'Match Winner',
