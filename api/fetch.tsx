@@ -1,6 +1,6 @@
 import axios from 'axios';
 import rateLimit from 'axios-rate-limit';
-import { Fixture, LeagueData, Standing, Venue, Country } from './types';
+import { Fixture, LeagueData, Standing, Venue, Country, Prediction } from './types';
 
 type LeagueApi = {
   id: number;
@@ -372,4 +372,27 @@ export const fetchBets = async (date: Date): Promise<OddBetApi[]> => {
   }
 
   return bets;
+};
+
+export const fetchPredictionFixtureId = async (id: number): Promise<Prediction> => {
+  const options = {
+    method: 'GET',
+    url: process.env.API_URL + '/predictions',
+    params: {
+      fixture: id,
+    },
+    headers: {
+      'X-RapidAPI-Key': process.env.API_KEY,
+      'X-RapidAPI-Host': process.env.API_HOST,
+    },
+  };
+
+  return await http
+    .request(options)
+    .then(function (response) {
+      return response.data.response[0];
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 };

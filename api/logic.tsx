@@ -6,6 +6,7 @@ import {
   fetchStandingsByLeagueId,
   fetchBets,
   OddBetApi,
+  fetchPredictionFixtureId,
 } from './fetch';
 import { getFromDBLeagues } from './getFromDB';
 import { bywAlgo } from './process';
@@ -13,6 +14,7 @@ import {
   storeFixture,
   storeLeague,
   storeOddBetApi,
+  storePrediction,
   storeStandings,
 } from './store';
 import { LeagueData } from './types';
@@ -129,12 +131,37 @@ export const seedOddBets = async (daysToSeed: number) => {
   console.log(`Bets Seeded.`);
 };
 
+export const seedPredictions = async (number: number) => {
+  console.log(`Seeding Predictions...`);
+
+  const fixtures = await prisma.fixture.findMany({
+    take: number,
+    where: {
+      date: {
+        gt: new Date(),
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  for (const fixture of fixtures) {
+    await fetchPredictionFixtureId(fixture.id).then(async (prediction) => {
+      await storePrediction(prediction, fixture.id);
+    });
+  };
+  console.log(`Predictions Seeded.`);
+};
+
 export const seedAll = async () => {
-  await seedLeagues(10).then(async () => {
+  await seedLeagues(5).then(async () => {
     await seedFixtures().then(async () => {
       await seedStandigns().then(async () => {
         await bywAlgo(100).then(async () => {
-          await seedOddBets(3);
+          await seedOddBets(3).then(async () => {
+            await seedPredictions(40);
+          });
         });
       });
     });

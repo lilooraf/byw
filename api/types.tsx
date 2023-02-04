@@ -142,3 +142,55 @@ export type Country = {
   code: string;
   flag: string;
 };
+
+export type Prediction = {
+  predictions: {
+    winner: {
+      id: number;
+      name: string;
+      comment: string;
+    };
+    win_or_draw: boolean;
+    under_or_over: number;
+    goals: {
+      home: number;
+      away: number;
+    };
+    advice: string;
+    percent: {
+      home: number;
+      away: number;
+      draw: number;
+    };
+  };
+  comparison: {
+    form: {
+      home: number;
+      away: number;
+    };
+    att: {
+      home: number;
+      away: number;
+    };
+    def: {
+      home: number;
+      away: number;
+    };
+    poisson_distribution: {
+      home: number;
+      away: number;
+    };
+    h2h: {
+      home: number;
+      away: number;
+    };
+    goals: {
+      home: number;
+      away: number;
+    };
+    total: {
+      home: number;
+      away: number;
+    };
+  };
+};

@@ -3,7 +3,7 @@ import { BywCustom } from '../bywAlgo/process';
 import prisma from '../lib/prisma';
 import { BetApi, BookmakerApi, OddApi, OddBetApi } from './fetch';
 import { getFromDBLeagueById } from './getFromDB';
-import { Country, Fixture, LeagueData, Standing, Season, StandingData } from './types';
+import { Country, Fixture, LeagueData, Standing, Season, StandingData, Prediction } from './types';
 
 export const storeStandings = async (standingsData: Standing[]) => {
   if (!standingsData) return;
@@ -536,3 +536,24 @@ export const storeBookmaker = async (bookmaker: BookmakerApi) => {
     },
   });
 };
+
+export const storePrediction = async (prediction: Prediction, id: number) => {
+  await prisma.prediction.upsert({
+    where: {
+      fixtureId: id,
+    },
+    create: {
+      predictions: prediction.predictions,
+      comparison: prediction.comparison,
+      Fixture: {
+        connect: {
+          id: id,
+        },
+      },
+    },
+    update: {
+      predictions: prediction.predictions,
+      comparison: prediction.comparison,
+    },
+  });
+}
