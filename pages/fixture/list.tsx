@@ -361,7 +361,7 @@ const Fixtures: React.FC<Props> = (props) => {
                 <div className='flex w-full justify-center' ref={ref}>
                   <button onClick={() => {
                     setBookmakersListOpen(!bookmakersListOpen);
-                  }} id="dropdownRadioButton" data-dropdown-toggle="dropdownDefaultRadio" className=" relative hover:bg-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:hover:bg-blue-700" type="button">
+                  }} id="dropdownRadioButton" data-dropdown-toggle="dropdownDefaultRadio" className="whitespace-nowrap relative hover:bg-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:hover:bg-blue-700" type="button">
                     Bookmaker: {bookmakerSelected}
                     <svg className="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                   </button>
