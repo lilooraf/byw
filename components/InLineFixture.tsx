@@ -4,7 +4,7 @@ import { perc2color } from '../utils/perc2color';
 import { FixtureProps } from '../pages/fixture/list';
 import { MatchStatsInline } from './MatchStatsInline';
 
-const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
+const InLineFixture: React.FC<{ fixture: FixtureProps, bookmakerSelected: string }> = ({ fixture, bookmakerSelected }) => {
   return (
     <tr className='rounded-sm border-b-2 border-gray-100 dark:border-gray-800'>
       <td className='w-4 p-4 hidden lg:table-cell'>
@@ -62,13 +62,13 @@ const InLineFixture: React.FC<{ fixture: FixtureProps }> = ({ fixture }) => {
       <td className='px-2 hidden lg:table-cell'>
         <div className='flex justify-center align-middle text-center text-xs font-mono'>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600 border-r-2 rounded-l-md border-2 font-bold'>
-            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Home')?.value || '-'}
+            {fixture.Bets.find((b) => b.Bookmaker?.name === bookmakerSelected)?.Odds.find((o) => o.type === 'Home')?.value || '-'}
           </div>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600'>
-            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Draw')?.value || '-'}
+            {fixture.Bets.find((b) => b.Bookmaker?.name === bookmakerSelected)?.Odds.find((o) => o.type === 'Draw')?.value || '-'}
           </div>
           <div className='px-2 py-1 bg-slate-100 border-slate-400 dark:bg-gray-800 dark:border-gray-600 border-l-2 rounded-r-md'>
-            {fixture.Bets[0]?.Odds.find((o) => o.type === 'Away')?.value || '-'}
+            {fixture.Bets.find((b) => b.Bookmaker?.name === bookmakerSelected)?.Odds.find((o) => o.type === 'Away')?.value || '-'}
           </div>
         </div>
       </td>
