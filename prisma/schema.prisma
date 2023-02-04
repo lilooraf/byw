@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model Team {
@@ -87,29 +88,38 @@ model Byw {
 }
 
 model Fixture {
-  id         Int      @id @unique
+  id         Int         @id @unique
   timezone   String
   date       DateTime
   timestamp  BigInt
   leagueId   Int?
-  League     League?  @relation(onDelete: Cascade, fields: [leagueId], references: [id])
-  Venue      Venue?   @relation(onDelete: Cascade, fields: [venueId], references: [id])
+  League     League?     @relation(onDelete: Cascade, fields: [leagueId], references: [id])
+  Venue      Venue?      @relation(onDelete: Cascade, fields: [venueId], references: [id])
   venueId    Int?
-  TeamHome   Team?    @relation(onDelete: Cascade, fields: [teamHomeId], references: [id], name: "home")
+  TeamHome   Team?       @relation(onDelete: Cascade, fields: [teamHomeId], references: [id], name: "home")
   teamHomeId Int?
-  TeamAway   Team?    @relation(onDelete: Cascade, fields: [teamAwayId], references: [id], name: "away")
+  TeamAway   Team?       @relation(onDelete: Cascade, fields: [teamAwayId], references: [id], name: "away")
   teamAwayId Int?
-  Teams      Team[]   @relation(name: "FixtureTeams")
+  Teams      Team[]      @relation(name: "FixtureTeams")
   status_    String
   winnerHome Boolean?
   winnerAway Boolean?
   homeScore  Int
   awayScore  Int
-  score      Json?    @db.Json
+  score      Json?       @db.Json
   seasonYear Int?
-  Season     Season?  @relation(onDelete: Cascade, fields: [seasonYear], references: [year])
+  Season     Season?     @relation(onDelete: Cascade, fields: [seasonYear], references: [year])
   Byw        Byw?
-  Bets       Bet[]    @relation(name: "FixtureBets")
+  Bets       Bet[]       @relation(name: "FixtureBets")
+  Prediction Prediction?
+}
+
+model Prediction {
+  id                   Int     @id @default(autoincrement())
+  fixtureId            Int     @unique
+  Fixture              Fixture @relation(onDelete: Cascade, fields: [fixtureId], references: [id])
+  comparison           Json?   @db.Json
+  predictions          Json?   @db.Json
 }
 
 model Bookmaker {
@@ -129,11 +139,11 @@ model Bet {
 }
 
 model Odd {
-  id          Int         @id @default(autoincrement())
-  type        String
-  value       String
-  betId       Int?
-  Bet         Bet?       @relation(onDelete: Cascade, fields: [betId], references: [id], name: "BetOdds")
+  id    Int    @id @default(autoincrement())
+  type  String
+  value String
+  betId Int?
+  Bet   Bet?   @relation(onDelete: Cascade, fields: [betId], references: [id], name: "BetOdds")
 }
 
 model Post {
