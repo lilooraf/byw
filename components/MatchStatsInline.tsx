@@ -19,6 +19,10 @@ export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
         <div>
           <div className='flex'>
             <div className='flex-grow flex space-x-1 justify-start items-center'>
+              <span className='flex justify-center items-center rounded-full md:rounded-md border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm '>
+                <small className=''>13</small>
+                <small className='hidden md:block'>&nbsp;pts</small>
+              </span>
               <FixtureStatusForTeam
                 fixture={fixture.TeamHome.Fixtures[0]}
                 teamId={fixture.TeamHome.id}
@@ -39,15 +43,15 @@ export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
                 fixture={fixture.TeamHome.Fixtures[4]}
                 teamId={fixture.TeamHome.id}
               ></FixtureStatusForTeam>
-              <span className='flex justify-center items-center rounded-full md:rounded-none border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm'>
-                <small className=''>13</small>
-                <small className='hidden md:block'>&nbsp;pts</small>
-              </span>
             </div>
           </div>
 
           <div className='flex'>
             <div className='flex-grow flex space-x-1 justify-start items-center'>
+              <span className='flex justify-center items-center rounded-full md:rounded-md border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm '>
+                <small className=''>13</small>
+                <small className='hidden md:block'>&nbsp;pts</small>
+              </span>
               <FixtureStatusForTeam
                 fixture={fixture.TeamHome.FixturesHome[0]}
                 teamId={fixture.TeamHome.id}
@@ -68,10 +72,7 @@ export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
                 fixture={fixture.TeamHome.FixturesHome[4]}
                 teamId={fixture.TeamHome.id}
               ></FixtureStatusForTeam>
-              <span className='flex justify-center items-center rounded-full md:rounded-none border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm'>
-                <small className=''>13</small>
-                <small className='hidden md:block'>&nbsp;pts</small>
-              </span>
+
               <div>
                 <small className='hidden sm:block lg:hidden w-10 text-center'>
                   Dom
@@ -121,7 +122,7 @@ export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
                 fixture={fixture.TeamAway.Fixtures[4]}
                 teamId={fixture.TeamAway.id}
               ></FixtureStatusForTeam>
-              <span className='flex justify-center items-center rounded-full md:rounded-none border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm'>
+              <span className='flex justify-center items-center rounded-full md:rounded-md border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm '>
                 <small className=''>13</small>
                 <small className='hidden md:block'>&nbsp;pts</small>
               </span>
@@ -155,7 +156,7 @@ export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
                 fixture={fixture.TeamAway.FixturesAway[4]}
                 teamId={fixture.TeamHome.id}
               ></FixtureStatusForTeam>
-              <span className='flex justify-center items-center rounded-full md:rounded-none border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm'>
+              <span className='flex justify-center items-center rounded-full md:rounded-md border-2 border-green-600 h-4 w-4 md:h-4 md:w-10 text-xs md:text-sm '>
                 <small className=''>13</small>
                 <small className='hidden md:block'>&nbsp;pts</small>
               </span>

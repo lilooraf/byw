@@ -22,13 +22,13 @@ export const H2H: React.FC<{
     });
     if (homeWins! && awayWins! && draws!) {
       return (
-        <div className='bg-gray-800 text-xs text-yellow-500 rounded-md my-2 py-1 grid grid-cols-1 grid-rows-1 text-center'>
+        <div className='bg-gray-200 dark:bg-gray-800 text-xs font-bold dark:text-yellow-500 rounded-md my-2 py-1 grid grid-cols-1 grid-rows-1 text-center'>
           <small>No head to head</small>
         </div>
       );
     } else {
       return (
-        <div className='bg-gray-800 text-xs text-yellow-500 rounded-md my-2 py-1 grid grid-cols-3 grid-rows-1 text-center'>
+        <div className='bg-gray-200 dark:bg-gray-800 text-xs font-bold dark:text-yellow-500 rounded-md my-2 py-1 grid grid-cols-3 grid-rows-1 text-center'>
           <small>
             {homeWins} VICTOIRE{homeWins > 1 ? 'S' : ''}
           </small>
