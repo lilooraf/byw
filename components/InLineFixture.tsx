@@ -1,9 +1,9 @@
 import React from 'react';
 import { H2H } from './H2h';
 import { perc2color } from '../utils/perc2color';
-import { FixtureProps } from '../pages/fixture/list';
 import { MatchStatsInline } from './MatchStatsInline';
 import { ComparisonMini } from './ComparisonMini';
+import { FixtureProps } from '../pages/api/fixtures';
 
 const InLineFixture: React.FC<{
   fixture: FixtureProps;
@@ -26,7 +26,7 @@ const InLineFixture: React.FC<{
       <td className='px-3 hidden sm:table-cell select-none'>
         <div className='align-middle text-center'>
           <small>
-            {fixture.date.toLocaleDateString('fr-FR', {
+            {new Date(fixture.date).toLocaleDateString('fr-FR', {
               weekday: 'short',
               month: 'long',
               day: 'numeric',

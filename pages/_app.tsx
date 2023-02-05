@@ -4,6 +4,9 @@ import './../styles/globals.css';
 import Router from 'next/router';
 import { useState } from 'react';
 import Layout from '../components/Layout';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [loaging, setLoading] = useState(false);
@@ -22,7 +25,9 @@ const App = ({ Component, pageProps }: AppProps) => {
     <SessionProvider session={pageProps.session}>
       <div className='relative'>
         <Layout loading={loaging}>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
         </Layout>
       </div>
     </SessionProvider>

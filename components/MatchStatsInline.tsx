@@ -1,4 +1,4 @@
-import { FixtureProps } from '../pages/fixture/list';
+import { FixtureProps } from '../pages/api/fixtures';
 import { FixtureStatusForTeam } from './FixtureStatusForTeam';
 
 export const MatchStatsInline: React.FC<{ fixture: FixtureProps }> = ({
