@@ -49,7 +49,7 @@ const fetchFixtures = async ({
 }) => {
   const leagues = leaguesSelected.map((league) => league.id);
   const res = await fetch(
-    `/api/fixtures?page=${pageParam}&dategt=${dategt}&leagues=${leagues.join(
+    `/api/fixtures?limit=10&offset=${pageParam}&dategt=${dategt}&leagues=${leagues.join(
       ','
     )}`
   );
