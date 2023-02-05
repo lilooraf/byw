@@ -38,14 +38,20 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   };
 };
 
-const fetchFixtures = async ({ dategt = '', leaguesSelected, pageParam = '' }: {
+const fetchFixtures = async ({
+  dategt = '',
+  leaguesSelected,
+  pageParam = '',
+}: {
   dategt?: string;
   leaguesSelected: League[];
   pageParam?: string;
 }) => {
   const leagues = leaguesSelected.map((league) => league.id);
   const res = await fetch(
-    `/api/fixtures?page=${pageParam}&dategt=${dategt}&leagues=${leagues.join(',')}`
+    `/api/fixtures?page=${pageParam}&dategt=${dategt}&leagues=${leagues.join(
+      ','
+    )}`
   );
   const fixtures = await res.json();
   return fixtures;
@@ -57,12 +63,18 @@ const Fixtures: React.FC<Props> = (props) => {
   const [bookmakerSelected, setBookmakerSelected] = useState(
     props.bookmmakers[0].name
   );
+  const [leaguesSelected, setLeaguesSelected] = useState(props.leagues);
+  const [datesSelected, setDatesSelected] = useState({ start: '', end: '' });
+
   const [bookmakersListOpen, setBookmakersListOpen] = useState(false);
   const [leaguesListOpen, setLeagueListOpen] = useState(false);
+  const [datesListOpen, setDatesListOpen] = useState(false);
+
   const [ref, InView] = useInView();
+
   const refBookmaker = useRef(null);
   const refLeague = useRef(null);
-  const [leaguesSelected, setLeaguesSelected] = useState(props.leagues);
+  const refDate = useRef(null);
 
   const [dategt, setDategt] = useState(new Date().toString());
 
@@ -77,7 +89,8 @@ const Fixtures: React.FC<Props> = (props) => {
     refetch,
   } = useInfiniteQuery(
     ['fixtures', { dategt, leaguesSelected }],
-    ({ pageParam = '' }) => fetchFixtures({ dategt, leaguesSelected, pageParam }),
+    ({ pageParam = '' }) =>
+      fetchFixtures({ dategt, leaguesSelected, pageParam }),
     {
       getNextPageParam: (lastPage, pages) => lastPage.nextPage ?? false,
     }
@@ -98,6 +111,7 @@ const Fixtures: React.FC<Props> = (props) => {
 
   useOutsideCloser(refBookmaker, () => setBookmakersListOpen(false));
   useOutsideCloser(refLeague, () => setLeagueListOpen(false));
+  useOutsideCloser(refDate, () => setDatesListOpen(false));
 
   const changeAllCheckboxes = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(
@@ -121,72 +135,100 @@ const Fixtures: React.FC<Props> = (props) => {
     <div className='page mx-4 flex justify-center'>
       <main className='w-full'>
         <table className='w-full'>
-          <caption className='mb-4 rounded-lg border dark:border-0 p-5 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800'>
-            <div className='flex w-0' ref={refLeague}>
-              <button
-                onClick={() => {
-                  setLeagueListOpen(!leaguesListOpen);
-                }}
-                className='whitespace-nowrap border relative hover:bg-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:hover:bg-blue-700'
-                type='button'
-              >
-                LEAGUE
-                <svg
-                  className='w-4 h-4 ml-2'
-                  aria-hidden='true'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                  xmlns='http://www.w3.org/2000/svg'
+          <caption className='mb-4 rounded-lg border dark:border-0 p-3 text-lg font-semibold text-left text-gray-900 bg-white dark:text-white dark:bg-gray-800'>
+            <div className='flex gap-2'>
+              <div ref={refDate}>
+                <button
+                  onClick={() => {
+                    setDatesListOpen(!datesListOpen);
+                  }}
+                  className='whitespace-nowrap border relative hover:bg-blue-300 font-medium rounded-lg text-sm px-2 md:px-4 py-1 md:py-2 text-center inline-flex items-center dark:hover:bg-blue-700'
+                  type='button'
                 >
-                  <path
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
-                    d='M19 9l-7 7-7-7'
-                  ></path>
-                </svg>
-              </button>
-              <div
-                hidden={!leaguesListOpen}
-                className='overflow-auto h-40 z-10 absolute w-48 mt-12 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
-              >
-                <ul
-                  className='space-y-1 text-sm text-gray-700 dark:text-gray-200 '
+                  DATE
+                  <svg
+                    className='w-4 h-4 ml-2'
+                    aria-hidden='true'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M19 9l-7 7-7-7'
+                    ></path>
+                  </svg>
+                </button>
+                <div
+                  hidden={!datesListOpen}
+                  className='overflow-auto h-40 z-10 absolute w-48 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
                 >
-                  {props?.leagues?.map((league) => (
-                    <li
-                      className=''
-                      key={league.id}
-                    >
-                      <label className='flex items-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'>
-                        <input
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setLeaguesSelected([
-                                ...leaguesSelected,
-                                league
-                              ]);
-                            } else {
-                              setLeaguesSelected(
-                                leaguesSelected.filter(
-                                  (l) => l !== league
-                                )
-                              );
-                            }
-                            refetch();
-                          }}
-                          type='checkbox'
-                          name='bookmaker'
-                          checked={leaguesSelected.includes(league)}
-                          value={league.id}
-                          className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-                        />
-                        <span className='font-medium'>{league.name}</span>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
+                  {/* TODO: Add date range picker */}
+                  <div className='flex justify-center'>Not available yet</div>
+                </div>
+              </div>
+              <div ref={refLeague}>
+                <button
+                  onClick={() => {
+                    setLeagueListOpen(!leaguesListOpen);
+                  }}
+                  className='whitespace-nowrap border relative hover:bg-blue-300 font-medium rounded-lg text-sm px-2 md:px-4 py-1 md:py-2 text-center inline-flex items-center dark:hover:bg-blue-700'
+                  type='button'
+                >
+                  LEAGUE
+                  <svg
+                    className='w-4 h-4 ml-2'
+                    aria-hidden='true'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M19 9l-7 7-7-7'
+                    ></path>
+                  </svg>
+                </button>
+                <div
+                  hidden={!leaguesListOpen}
+                  className='overflow-auto h-40 z-10 absolute w-48 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
+                >
+                  <ul className='space-y-1 text-sm text-gray-700 dark:text-gray-200 '>
+                    {props?.leagues?.map((league) => (
+                      <li className='' key={league.id}>
+                        <label className='flex items-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'>
+                          <input
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setLeaguesSelected([
+                                  ...leaguesSelected,
+                                  league,
+                                ]);
+                              } else {
+                                setLeaguesSelected(
+                                  leaguesSelected.filter((l) => l !== league)
+                                );
+                              }
+                              refetch();
+                            }}
+                            type='checkbox'
+                            name='bookmaker'
+                            checked={leaguesSelected.includes(league)}
+                            value={league.id}
+                            className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                          />
+                          <span className='font-medium'>{league.name}</span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </caption>
