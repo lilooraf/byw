@@ -116,7 +116,7 @@ const InLineFixture: React.FC<{
             <p>{fixture.Byw?.indice!.toFixed(0)}</p>
           </div>
           {fixture.Prediction && (
-            <div className='absolute group-hover:block group-active:block hidden '>
+            <div className='absolute group-hover:visible group-active:visible invisible opacity-0 group-hover:opacity-100 group-active:opacity-100 group-hover:ease-in ease-out transition-all duration-300 z-10'>
               <div className='absolute shadow-black -left-64 -top-24 z-10 flex flex-col w-56 items-center justify-center p-2 text-xs text-gray-800 bg-white rounded-md shadow-lg dark:bg-gray-800 dark:text-gray-100'>
                 <ComparisonMini
                   name='STRENGTH'
