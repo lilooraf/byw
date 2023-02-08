@@ -175,10 +175,10 @@ const Fixtures: React.FC<Props> = (props) => {
                 </button>
                 <div
                   hidden={!datesListOpen}
-                  className='overflow-auto h-40 z-20 absolute w-48 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
+                  className='select-none overflow-auto max-h-72 z-20 absolute mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
                 >
                   {/* TODO: Add date range picker */}
-                  <div className='flex justify-center'>Not available yet</div>
+                  <small className='flex justify-center p-2'>Not available yet</small>
                 </div>
               </div>
               <div ref={refLeague}>
