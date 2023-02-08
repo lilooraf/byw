@@ -53,12 +53,11 @@ const fetchFixtures = async ({
   pageParam = '',
 }: {
   dategt?: string;
-  leaguesSelected: League[];
+  leaguesSelected: number[];
   pageParam?: string;
 }) => {
-  const leagues = leaguesSelected.map((league) => league.id);
   const res = await fetch(
-    `/api/fixtures?limit=10&offset=${pageParam}&dategt=${dategt}&leagues=${leagues.join(
+    `/api/fixtures?limit=10&offset=${pageParam}&dategt=${dategt}&leagues=${leaguesSelected.join(
       ','
     )}`
   );
@@ -69,17 +68,10 @@ const fetchFixtures = async ({
 const Fixtures: React.FC<Props> = (props) => {
   const { data: session } = useSession();
 
-  const [bookmakerSelected, setBookmakerSelected] = useState(
-    props.bookmmakers[0].name
-  );
-  const [leaguesSelected, setLeaguesSelected] = useState(
-    props.leagues.map((c) => c.Leagues.map((l) => l)).flat(Infinity) as League[]
-  );
-  const [datesSelected, setDatesSelected] = useState({ start: '', end: '' });
-
   const [bookmakersListOpen, setBookmakersListOpen] = useState(false);
   const [leaguesListOpen, setLeagueListOpen] = useState(false);
   const [datesListOpen, setDatesListOpen] = useState(false);
+  const [dategt, setDategt] = useState(new Date().toString());
 
   const [ref, InView] = useInView();
 
@@ -87,7 +79,13 @@ const Fixtures: React.FC<Props> = (props) => {
   const refLeague = useRef(null);
   const refDate = useRef(null);
 
-  const [dategt, setDategt] = useState(new Date().toString());
+  const [bookmakerSelected, setBookmakerSelected] = useState(
+    props.bookmmakers[0].name
+  );
+  const [datesSelected, setDatesSelected] = useState({ start: '', end: '' });
+  const [leaguesSelected, setLeaguesSelected] = useState(
+    props.leagues.map((c) => c.Leagues.map((l) => l.id)).flat()
+  );
 
   const {
     isLoading,
@@ -213,32 +211,55 @@ const Fixtures: React.FC<Props> = (props) => {
                   className='select-none overflow-auto max-h-72 z-10 absolute mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
                 >
                   <ul className='space-y-1 text-sm text-gray-700 dark:text-gray-200 '>
+                    <div className='flex w-full border-b-2 border-gray-800'>
+                      <div
+                        className='flex w-full items-center justify-center text-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'
+                        onClick={() => {
+                          setLeaguesSelected([]);
+                        }}
+                      >
+                        <div>❌</div>
+                      </div>
+                      <div
+                        className='flex w-full items-center justify-center text-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'
+                        onClick={() => {
+                          setLeaguesSelected(
+                            props.leagues
+                              .map((c) => c.Leagues.map((l) => l.id))
+                              .flat()
+                          );
+                        }}
+                      >
+                        <div>✅</div>
+                      </div>
+                    </div>
                     {props?.leagues?.map((country) => (
                       <details className='open:border-b-2 border-gray-800'>
                         <summary className='flex items-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800 '>
                           <img className='h-3 w-3' src={country.flag} alt='' />
                           <span className='font-medium'>{country.name}</span>
                         </summary>
-                        {country.Leagues?.map((league, index) => (
+                        {country.Leagues?.map((league) => (
                           <label className='flex items-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'>
                             <input
                               onChange={(e) => {
                                 if (e.target.checked) {
                                   setLeaguesSelected([
                                     ...leaguesSelected,
-                                    league,
+                                    league.id,
                                   ]);
                                 } else {
                                   setLeaguesSelected(
-                                    leaguesSelected.filter((l) => l !== league)
+                                    leaguesSelected.filter(
+                                      (l) => l !== league.id
+                                    )
                                   );
                                 }
                                 refetch();
                               }}
                               type='checkbox'
                               name='bookmaker'
-                              checked={leaguesSelected.includes(league)}
-                              value={index}
+                              checked={leaguesSelected.includes(league.id)}
                               className='w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
                             />
                             <span className='font-medium'>{league.name}</span>
