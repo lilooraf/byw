@@ -357,12 +357,13 @@ export const fetchBets = async (date: Date): Promise<OddBetApi[]> => {
     },
   };
 
-  while (pagination <= total) {
+  while (pagination < total + 1) {
     options.params.page = pagination;
     await http
       .request(options)
       .then(function (response) {
         total = response.data.paging.total;
+        console.log('total', total);
         bets = bets.concat(response.data.response);
       })
       .catch(function (error) {

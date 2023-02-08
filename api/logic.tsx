@@ -43,8 +43,8 @@ export const seedFixtures = async () => {
 
   for (const league of leagues) {
     for (const season of league.Season) {
-      // Block seasons before actual year-2
-      if (season.year < new Date().getFullYear() - 2) {
+      // Block seasons before actual year-1
+      if (season.year < new Date().getFullYear() - 1) {
         console.log(`Skipping ${league.name} ${season.year}`);
         continue;
       }
@@ -80,7 +80,7 @@ export const seedStandigns = async () => {
   for (const league of leagues) {
     for (const season of league.Season) {
       // Block seasons before actual year-2
-      if (season.year < new Date().getFullYear() - 2) continue;
+      if (season.year < new Date().getFullYear() - 1) continue;
       await fetchStandingsByLeagueId(league.id, season.year.toString()).then(
         async (standings) => {
           await storeStandings(standings);
@@ -141,6 +141,9 @@ export const seedPredictions = async (number: number) => {
         gt: new Date(),
       },
     },
+    orderBy: {
+      date: 'asc',
+    },
     select: {
       id: true,
     },
@@ -155,12 +158,12 @@ export const seedPredictions = async (number: number) => {
 };
 
 export const seedAll = async () => {
-  await seedLeagues(5).then(async () => {
+  await seedLeagues(50).then(async () => {
     await seedFixtures().then(async () => {
       await seedStandigns().then(async () => {
-        await bywAlgo(100).then(async () => {
-          await seedOddBets(3).then(async () => {
-            await seedPredictions(40);
+        await bywAlgo(2).then(async () => {
+          await seedOddBets(30).then(async () => {
+            await seedPredictions(100);
           });
         });
       });
