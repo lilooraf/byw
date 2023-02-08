@@ -175,7 +175,7 @@ const Fixtures: React.FC<Props> = (props) => {
                 </button>
                 <div
                   hidden={!datesListOpen}
-                  className='overflow-auto h-40 z-10 absolute w-48 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
+                  className='overflow-auto h-40 z-20 absolute w-48 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
                 >
                   {/* TODO: Add date range picker */}
                   <div className='flex justify-center'>Not available yet</div>
@@ -208,10 +208,10 @@ const Fixtures: React.FC<Props> = (props) => {
                 </button>
                 <div
                   hidden={!leaguesListOpen}
-                  className='select-none overflow-auto max-h-72 z-10 absolute mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
+                  className='select-none overflow-auto max-h-72 z-20 absolute mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600'
                 >
                   <ul className='space-y-1 text-sm text-gray-700 dark:text-gray-200 '>
-                    <div className='flex w-full border-b-2 border-gray-800'>
+                    <div className='sticky top-0 dark:bg-gray-700 bg-white flex w-full border-b-2 dark:border-gray-800'>
                       <div
                         className='flex w-full items-center justify-center text-center space-x-3 m-1 rounded-lg p-2 hover:bg-slate-300 hover:dark:bg-slate-800'
                         onClick={() => {
@@ -272,7 +272,7 @@ const Fixtures: React.FC<Props> = (props) => {
               </div>
             </div>
           </caption>
-          <thead className='whitespace-nowraptext-xs uppercase text-sm md:text-md bg-gray-100 dark:bg-gray-800 dark:text-white'>
+          <thead className='sticky top-16 z-10 whitespace-nowraptext-xs uppercase text-sm md:text-md bg-gray-100 dark:bg-gray-800 dark:text-white'>
             <tr className='h-8 md:h-12'>
               <th className='hidden w-4 p-4 rounded-l-lg lg:table-cell'>
                 <div className='flex items-center'>
