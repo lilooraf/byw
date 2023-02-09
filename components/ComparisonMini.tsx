@@ -13,14 +13,14 @@ export const ComparisonMini: React.FC<{
       <div>{name}</div>
       <div className='flex text-center align-middle'>
         <div className='w-10'>
-          {parseFloat(awayPercent?.split('%')[0]).toFixed(0)}%
+          {parseFloat(homePercent?.split('%')[0]).toFixed(0)}%
         </div>
         <div className='flex w-full self-center'>
           <div className='w-full bg-gray-200 h-1 flex justify-end rounded-l-lg'>
             <div
               className='bg-blue-600 h-1 rounded-l-lg'
               style={{
-                width: awayPercent,
+                width: homePercent,
               }}
             ></div>
           </div>
@@ -28,13 +28,13 @@ export const ComparisonMini: React.FC<{
             <div
               className='bg-orange-600 h-1 rounded-r-lg'
               style={{
-                width: homePercent,
+                width: awayPercent,
               }}
             ></div>
           </div>
         </div>
         <div className='w-10'>
-          {parseFloat(homePercent?.split('%')[0]).toFixed(0)}%
+          {parseFloat(awayPercent?.split('%')[0]).toFixed(0)}%
         </div>
       </div>
     </div>
